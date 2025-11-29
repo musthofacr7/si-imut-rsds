@@ -349,23 +349,34 @@ function loadChartData(indikatorId, areaId, year) {
                     tableBody += `</tr>`;
                     
                     // Row 3: Achievement
+                    const satuanLabel = satuan === '%' ? '%' : `(${satuan})`;
                     tableBody += `<tr>`;
-                    tableBody += `<td class="fw-bold text-primary">Capaian (%)</td>`;
+                    tableBody += `<td class="fw-bold text-primary">Capaian ${satuanLabel}</td>`;
                     
                     for (let i = 1; i <= 12; i++) {
                         const monthKey = i.toString().padStart(2, '0');
                         const data = months[monthKey];
                         let badgeClass = 'bg-secondary';
+                        let displayValue = data.achievement;
                         
-                        // Simple color coding
                         if (data.denumerator > 0) {
-                            if (data.achievement >= 80) badgeClass = 'bg-success';
-                            else if (data.achievement >= 50) badgeClass = 'bg-warning text-dark';
-                            else badgeClass = 'bg-danger';
+                            if (satuan === '%') {
+                                // Logic for Percentage
+                                if (data.achievement >= 80) badgeClass = 'bg-success';
+                                else if (data.achievement >= 50) badgeClass = 'bg-warning text-dark';
+                                else badgeClass = 'bg-danger';
+                                
+                                displayValue += '%';
+                            } else {
+                                // Logic for Non-Percentage (use neutral or check against target if needed)
+                                // For now, just use a neutral color or info
+                                badgeClass = 'bg-info text-dark';
+                                displayValue += ' ' + satuan;
+                            }
                         }
                         
                         tableBody += `<td class="text-center">
-                            <span class="badge ${badgeClass}">${data.achievement}%</span>
+                            <span class="badge ${badgeClass}">${displayValue}</span>
                         </td>`;
                     }
                     tableBody += `</tr>`;
