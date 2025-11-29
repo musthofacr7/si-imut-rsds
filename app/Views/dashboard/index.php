@@ -82,7 +82,9 @@ Dashboard
 
 <?= $this->section('scripts') ?>
 <!-- Chart.js -->
+<!-- Chart.js -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0/dist/chartjs-plugin-datalabels.min.js"></script>
 <!-- jsPDF for PDF export -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <!-- html2canvas for PNG export -->
@@ -253,6 +255,12 @@ document.getElementById('btnExportExcel')?.addEventListener('click', async funct
 chartData.forEach((data, index) => {
     const ctx = document.getElementById('chart-' + index);
     if (ctx) {
+        // Register the plugin
+        Chart.register(ChartDataLabels);
+
+        // Create array of target values (same value for all months)
+        const targetData = Array(12).fill(data.target);
+
         const chartInstance = new Chart(ctx, {
             type: 'bar',
             data: {
@@ -262,7 +270,18 @@ chartData.forEach((data, index) => {
                     data: data.data,
                     backgroundColor: colors[index % colors.length],
                     borderColor: colors[index % colors.length].replace('0.8', '1'),
-                    borderWidth: 1
+                    borderWidth: 1,
+                    order: 2
+                }, {
+                    label: 'Target',
+                    data: targetData,
+                    type: 'line',
+                    borderColor: 'rgba(255, 99, 132, 1)',
+                    borderWidth: 2,
+                    borderDash: [5, 5],
+                    pointRadius: 0,
+                    fill: false,
+                    order: 1
                 }]
             },
             options: {
@@ -289,6 +308,22 @@ chartData.forEach((data, index) => {
                                 return 'Capaian: ' + context.parsed.y.toFixed(2) + '%';
                             }
                         }
+                    },
+                    datalabels: {
+                        anchor: 'end',
+                        align: 'top',
+                        formatter: function(value, context) {
+                            // Only show label for the first dataset (bar chart)
+                            if (context.datasetIndex === 0) {
+                                return value.toFixed(2) + '%';
+                            }
+                            return ''; // Hide for target line
+                        },
+                        font: {
+                            weight: 'bold',
+                            size: 10
+                        },
+                        color: '#333'
                     }
                 }
             }
