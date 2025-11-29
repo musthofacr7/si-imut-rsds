@@ -24,7 +24,7 @@ Dashboard
         <div class="card">
             <div class="card-header">
                 <div class="row align-items-center">
-                    <div class="col-md-4">
+                    <div class="col-md-5">
                         <h3 class="card-title mb-0">Capaian Indikator Mutu Tahun <?= $selectedYear ?></h3>
                     </div>
                     <div class="col-md-4 text-center">
@@ -40,9 +40,9 @@ Dashboard
                             </button>
                         </div>
                     </div>
-                    <div class="col-md-4 text-end">
+                    <div class="col-md-3 text-end">
                         <form method="GET" action="<?= base_url('dashboard') ?>" class="d-inline">
-                            <div class="input-group input-group-sm d-inline-flex" style="width: auto;">
+                            <div class="input-group input-group-sm d-inline-flex" style="min-width: 100;">
                                 <select name="year" class="form-select form-select-sm select2" onchange="this.form.submit()">
                                     <?php for ($y = date('Y'); $y >= date('Y') - 5; $y--): ?>
                                         <option value="<?= $y ?>" <?= $selectedYear == $y ? 'selected' : '' ?>><?= $y ?></option>
@@ -266,7 +266,7 @@ chartData.forEach((data, index) => {
             data: {
                 labels: monthLabels,
                 datasets: [{
-                    label: 'Capaian (%)',
+                    label: 'Capaian (' + data.satuan + ')',
                     data: data.data,
                     backgroundColor: colors[index % colors.length],
                     borderColor: colors[index % colors.length].replace('0.8', '1'),
@@ -290,10 +290,13 @@ chartData.forEach((data, index) => {
                 scales: {
                     y: {
                         beginAtZero: true,
-                        max: 100,
+                        max: data.satuan === '%' ? 100 : undefined,
                         ticks: {
                             callback: function(value) {
-                                return value + '%';
+                                if (data.satuan === '%') {
+                                    return value + '%';
+                                }
+                                return value;
                             }
                         }
                     }
@@ -305,7 +308,13 @@ chartData.forEach((data, index) => {
                     tooltip: {
                         callbacks: {
                             label: function(context) {
-                                return 'Capaian: ' + context.parsed.y.toFixed(2) + '%';
+                                let label = 'Capaian: ' + context.parsed.y;
+                                if (data.satuan === '%') {
+                                    label += '%';
+                                } else {
+                                    label += ' ' + data.satuan;
+                                }
+                                return label;
                             }
                         }
                     },
@@ -315,7 +324,11 @@ chartData.forEach((data, index) => {
                         formatter: function(value, context) {
                             // Only show label for the first dataset (bar chart)
                             if (context.datasetIndex === 0) {
-                                return value.toFixed(2) + '%';
+                                if (data.satuan === '%') {
+                                    return value.toFixed(2) + '%';
+                                } else {
+                                    return value + ' ' + data.satuan;
+                                }
                             }
                             return ''; // Hide for target line
                         },

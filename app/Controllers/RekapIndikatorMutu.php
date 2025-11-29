@@ -48,17 +48,26 @@ class RekapIndikatorMutu extends BaseController
             ]);
         }
 
+        // Get indicator details first to know the unit
+        $indikator = $this->indikatorMutuModel->find($indikatorId);
+        
+        if (!$indikator) {
+            return $this->response->setJSON([
+                'success' => false,
+                'message' => 'Indikator tidak ditemukan'
+            ]);
+        }
+        
+        $satuan = $indikator['satuan_target_pencapaian'] ?? '%';
+
         // Get monthly achievement data (for chart - aggregated)
-        $stats = $this->inputIndikatorRsModel->getMonthlyStats($indikatorId, $areaId, $year);
+        $stats = $this->inputIndikatorRsModel->getMonthlyStats($indikatorId, $areaId, $year, $satuan);
         
         // Get area-wise monthly stats (for table - matrix)
-        $areaStats = $this->inputIndikatorRsModel->getAreaMonthlyStats($indikatorId, $year, $areaId);
+        $areaStats = $this->inputIndikatorRsModel->getAreaMonthlyStats($indikatorId, $year, $areaId, $satuan);
         
         // Extract achievements for chart
         $achievements = array_column($stats, 'achievement');
-
-        // Get indicator name for chart title
-        $indikator = $this->indikatorMutuModel->find($indikatorId);
         
         // Get area name if specified, otherwise use "Semua Area"
         $areaName = 'Semua Area';
@@ -76,7 +85,8 @@ class RekapIndikatorMutu extends BaseController
             'title' => $indikator['judul_indikator'] ?? 'Indikator',
             'area' => $areaName,
             'year' => $year,
-            'target' => floatval(str_replace(['%', ','], ['', '.'], $indikator['target_pencapaian'] ?? 0))
+            'target' => floatval(str_replace(['%', ','], ['', '.'], $indikator['target_pencapaian'] ?? 0)),
+            'satuan' => $indikator['satuan_target_pencapaian'] ?? '%'
         ]);
     }
 }

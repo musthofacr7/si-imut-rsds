@@ -36,7 +36,8 @@ class Dashboard extends BaseController
             // Get indicators for user's areas
             $indicators = $this->settingIndikatorMutuModel
                 ->select('setting_indikator_mutu.indikator_mutu_id, setting_indikator_mutu.area_pengukuran_id, 
-                          indikator_mutu.judul_indikator, indikator_mutu.target_pencapaian, area_pengukuran.area_pengukuran')
+                          indikator_mutu.judul_indikator, indikator_mutu.target_pencapaian, 
+                          indikator_mutu.satuan_target_pencapaian, area_pengukuran.area_pengukuran')
                 ->join('indikator_mutu', 'indikator_mutu.id = setting_indikator_mutu.indikator_mutu_id')
                 ->join('area_pengukuran', 'area_pengukuran.id = setting_indikator_mutu.area_pengukuran_id')
                 ->whereIn('setting_indikator_mutu.area_pengukuran_id', $areaIds)
@@ -59,6 +60,7 @@ class Dashboard extends BaseController
             // Prepare chart data for each indicator
             foreach ($indicators as $indicator) {
                 $achievementData = [];
+                $satuan = $indicator['satuan_target_pencapaian'] ?? '%';
                 
                 foreach ($months as $month) {
                     list($year, $monthNum) = explode('-', $month);
@@ -76,15 +78,26 @@ class Dashboard extends BaseController
                     
                     $totalNum = $data['total_num'] ?? 0;
                     $totalDen = $data['total_den'] ?? 0;
-                    $achievement = ($totalDen > 0) ? ($totalNum / $totalDen * 100) : 0;
                     
-                    $achievementData[] = round($achievement, 2);
+                    $achievement = 0;
+                    if ($totalDen > 0) {
+                        if ($satuan == '%') {
+                            $achievement = ($totalNum / $totalDen * 100);
+                            $achievement = round($achievement, 2);
+                        } else {
+                            $achievement = ($totalNum / $totalDen);
+                            $achievement = round($achievement, 0); // 0 decimals for non-percentage
+                        }
+                    }
+                    
+                    $achievementData[] = $achievement;
                 }
                 
                 $chartData[] = [
                     'label' => $indicator['judul_indikator'] . ' - ' . $indicator['area_pengukuran'],
                     'data' => $achievementData,
-                    'target' => floatval(str_replace(['%', ','], ['', '.'], $indicator['target_pencapaian'] ?? 0))
+                    'target' => floatval(str_replace(['%', ','], ['', '.'], $indicator['target_pencapaian'] ?? 0)),
+                    'satuan' => $satuan
                 ];
             }
         }

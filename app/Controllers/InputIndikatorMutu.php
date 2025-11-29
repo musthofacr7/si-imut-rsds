@@ -61,6 +61,7 @@ class InputIndikatorMutu extends BaseController
         $query = $this->settingIndikatorMutuModel
             ->select('setting_indikator_mutu.indikator_mutu_id, setting_indikator_mutu.area_pengukuran_id, 
                       indikator_mutu.judul_indikator, indikator_mutu.numerator, indikator_mutu.denumerator,
+                      indikator_mutu.satuan_target_pencapaian,
                       area_pengukuran.area_pengukuran')
             ->join('indikator_mutu', 'indikator_mutu.id = setting_indikator_mutu.indikator_mutu_id')
             ->join('area_pengukuran', 'area_pengukuran.id = setting_indikator_mutu.area_pengukuran_id');

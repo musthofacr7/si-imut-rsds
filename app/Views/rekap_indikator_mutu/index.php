@@ -219,27 +219,32 @@ function initChart() {
                     display: true,
                     position: 'top'
                 },
-                tooltip: {
-                    callbacks: {
-                        label: function(context) {
-                            return 'Pencapaian: ' + context.parsed.y.toFixed(2) + '%';
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                let label = 'Pencapaian: ' + context.parsed.y;
+                                // We need to access the unit from somewhere. 
+                                // Since initChart is called once, we might need to store the unit globally or update options dynamically.
+                                // For now, let's use a placeholder or check if we can access the chart options.
+                                // Better approach: update options in loadChartData.
+                                return label;
+                            }
                         }
+                    },
+                    datalabels: {
+                        anchor: 'end',
+                        align: 'top',
+                        formatter: function(value, context) {
+                            if (context.datasetIndex === 0) {
+                                return value;
+                            }
+                            return ''; 
+                        },
+                        font: {
+                            weight: 'bold'
+                        },
+                        color: '#333'
                     }
-                },
-                datalabels: {
-                    anchor: 'end',
-                    align: 'top',
-                    formatter: function(value, context) {
-                        // Only show label for the first dataset (bar chart)
-                        if (context.datasetIndex === 0) {
-                            return value.toFixed(2) + '%';
-                        }
-                        return ''; // Hide for target line
-                    },
-                    font: {
-                        weight: 'bold'
-                    },
-                    color: '#333'
                 }
             }
         }
@@ -277,6 +282,43 @@ function loadChartData(indikatorId, areaId, year) {
                 const targetData = Array(12).fill(response.target);
                 achievementChart.data.datasets[1].data = targetData;
                 
+                achievementChart.data.datasets[1].data = targetData;
+                
+                // Update Chart Options based on Unit
+                const satuan = response.satuan || '%';
+                
+                // Update Y-axis
+                achievementChart.options.scales.y.max = satuan === '%' ? 100 : undefined;
+                achievementChart.options.scales.y.ticks.callback = function(value) {
+                    return satuan === '%' ? value + '%' : value;
+                };
+                achievementChart.options.scales.y.title.text = 'Pencapaian (' + satuan + ')';
+                
+                // Update Tooltip
+                achievementChart.options.plugins.tooltip.callbacks.label = function(context) {
+                    let label = 'Pencapaian: ' + context.parsed.y;
+                    if (satuan === '%') {
+                        label = 'Pencapaian: ' + context.parsed.y.toFixed(2) + '%';
+                    } else {
+                        label = 'Pencapaian: ' + context.parsed.y + ' ' + satuan;
+                    }
+                    return label;
+                };
+                
+                // Update Data Labels
+                achievementChart.options.plugins.datalabels.formatter = function(value, context) {
+                    if (context.datasetIndex === 0) {
+                        if (satuan === '%') {
+                            return value.toFixed(2) + '%';
+                        } else {
+                            return value + ' ' + satuan;
+                        }
+                    }
+                    return '';
+                };
+                
+                achievementChart.data.datasets[0].label = 'Pencapaian (' + satuan + ')';
+
                 achievementChart.update();
                 
                 $('#chartContainer').show();

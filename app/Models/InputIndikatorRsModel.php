@@ -100,7 +100,7 @@ class InputIndikatorRsModel extends Model
     }
 
     // Get monthly detailed statistics (numerator, denumerator, achievement)
-    public function getMonthlyStats($indikatorId, $areaId, $year)
+    public function getMonthlyStats($indikatorId, $areaId, $year, $satuan = '%')
     {
         $data = $this->getChartData($indikatorId, $areaId, $year);
         
@@ -124,8 +124,13 @@ class InputIndikatorRsModel extends Model
             $months[$monthNum]['denumerator'] = (int)$row['total_denumerator'];
             
             if ($row['total_denumerator'] > 0) {
-                $achievement = ($row['total_numerator'] / $row['total_denumerator']) * 100;
-                $months[$monthNum]['achievement'] = round($achievement, 2);
+                if ($satuan == '%') {
+                    $achievement = ($row['total_numerator'] / $row['total_denumerator']) * 100;
+                    $months[$monthNum]['achievement'] = round($achievement, 2);
+                } else {
+                    $achievement = ($row['total_numerator'] / $row['total_denumerator']);
+                    $months[$monthNum]['achievement'] = round($achievement, 0);
+                }
             }
         }
         
@@ -133,7 +138,7 @@ class InputIndikatorRsModel extends Model
     }
 
     // Get monthly statistics grouped by area
-    public function getAreaMonthlyStats($indikatorId, $year, $areaId = null)
+    public function getAreaMonthlyStats($indikatorId, $year, $areaId = null, $satuan = '%')
     {
         $builder = $this->db->table($this->table);
         
@@ -182,8 +187,13 @@ class InputIndikatorRsModel extends Model
             $structuredData[$areaName][$monthNum]['denumerator'] = (int)$row['total_denumerator'];
             
             if ($row['total_denumerator'] > 0) {
-                $achievement = ($row['total_numerator'] / $row['total_denumerator']) * 100;
-                $structuredData[$areaName][$monthNum]['achievement'] = round($achievement, 2);
+                if ($satuan == '%') {
+                    $achievement = ($row['total_numerator'] / $row['total_denumerator']) * 100;
+                    $structuredData[$areaName][$monthNum]['achievement'] = round($achievement, 2);
+                } else {
+                    $achievement = ($row['total_numerator'] / $row['total_denumerator']);
+                    $structuredData[$areaName][$monthNum]['achievement'] = round($achievement, 0);
+                }
             }
         }
         

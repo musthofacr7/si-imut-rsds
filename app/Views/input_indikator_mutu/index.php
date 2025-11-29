@@ -132,13 +132,25 @@ Input Indikator Mutu RS
                                             $tempTotalDenumerator += is_numeric($val) ? (float)$val : 0;
                                         endfor;
                                         
-                                        $capaian = ($tempTotalDenumerator > 0) ? ($totalNumerator / $tempTotalDenumerator * 100) : 0;
+                                        $capaian = 0;
+                                        if ($tempTotalDenumerator > 0) {
+                                            if ($indikator['satuan_target_pencapaian'] == '%') {
+                                                $capaian = ($totalNumerator / $tempTotalDenumerator * 100);
+                                                $displayCapaian = number_format($capaian, 2) . '%';
+                                            } else {
+                                                $capaian = ($totalNumerator / $tempTotalDenumerator);
+                                                $displayCapaian = number_format($capaian, 0) . ' ' . $indikator['satuan_target_pencapaian'];
+                                            }
+                                        } else {
+                                            $displayCapaian = $indikator['satuan_target_pencapaian'] == '%' ? '0.00%' : '0 ' . $indikator['satuan_target_pencapaian'];
+                                        }
                                         ?>
                                         <td rowspan="2" class="text-center fw-bold bg-light align-middle capaian-cell"
                                             data-indikator-id="<?= $indikator['indikator_mutu_id'] ?>" 
                                             data-area-id="<?= $indikator['area_pengukuran_id'] ?>"
+                                            data-satuan="<?= $indikator['satuan_target_pencapaian'] ?>"
                                             style="position: sticky; right: -80px; z-index: 5;">
-                                            <?= number_format($capaian, 2) ?>%
+                                            <?= $displayCapaian ?>
                                         </td>
                                     </tr>
                                     <!-- Denumerator Row -->
@@ -555,12 +567,25 @@ $(document).ready(function() {
         const totalNum = parseFloat(totalNumText) || 0;
         const totalDen = parseFloat(totalDenText) || 0;
         
+        const cell = $(`.capaian-cell[data-indikator-id="${indikatorId}"][data-area-id="${areaId}"]`);
+        const satuan = cell.data('satuan');
+        
         let capaian = 0;
+        let displayCapaian = '';
+        
         if (totalDen > 0) {
-            capaian = (totalNum / totalDen) * 100;
+            if (satuan === '%') {
+                capaian = (totalNum / totalDen) * 100;
+                displayCapaian = capaian.toFixed(2) + '%';
+            } else {
+                capaian = (totalNum / totalDen);
+                displayCapaian = capaian.toFixed(0) + ' ' + satuan;
+            }
+        } else {
+            displayCapaian = satuan === '%' ? '0.00%' : '0 ' + satuan;
         }
         
-        $(`.capaian-cell[data-indikator-id="${indikatorId}"][data-area-id="${areaId}"]`).text(capaian.toFixed(2) + '%');
+        cell.text(displayCapaian);
     }
 });
 </script>
