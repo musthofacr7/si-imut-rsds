@@ -75,7 +75,8 @@ class RekapIndikatorMutu extends BaseController
             'labels' => ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Oct', 'Nov', 'Des'],
             'title' => $indikator['judul_indikator'] ?? 'Indikator',
             'area' => $areaName,
-            'year' => $year
+            'year' => $year,
+            'target' => floatval(str_replace(['%', ','], ['', '.'], $indikator['target_pencapaian'] ?? 0))
         ]);
     }
 }

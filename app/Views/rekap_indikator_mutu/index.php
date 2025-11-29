@@ -128,7 +128,9 @@ Rekap Indikator Mutu RS
 
 <?= $this->section('scripts') ?>
 <!-- Chart.js -->
+<!-- Chart.js -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0/dist/chartjs-plugin-datalabels.min.js"></script>
 
 <script>
 let achievementChart = null;
@@ -162,6 +164,9 @@ $(document).ready(function() {
 function initChart() {
     const ctx = document.getElementById('achievementChart').getContext('2d');
     
+    // Register the plugin
+    Chart.register(ChartDataLabels);
+
     achievementChart = new Chart(ctx, {
         type: 'bar',
         data: {
@@ -171,7 +176,18 @@ function initChart() {
                 data: [],
                 backgroundColor: 'rgba(54, 162, 235, 0.6)',
                 borderColor: 'rgba(54, 162, 235, 1)',
-                borderWidth: 1
+                borderWidth: 1,
+                order: 2
+            }, {
+                label: 'Target',
+                data: [],
+                type: 'line',
+                borderColor: 'rgba(255, 99, 132, 1)',
+                borderWidth: 2,
+                borderDash: [5, 5],
+                pointRadius: 0,
+                fill: false,
+                order: 1
             }]
         },
         options: {
@@ -209,6 +225,21 @@ function initChart() {
                             return 'Pencapaian: ' + context.parsed.y.toFixed(2) + '%';
                         }
                     }
+                },
+                datalabels: {
+                    anchor: 'end',
+                    align: 'top',
+                    formatter: function(value, context) {
+                        // Only show label for the first dataset (bar chart)
+                        if (context.datasetIndex === 0) {
+                            return value.toFixed(2) + '%';
+                        }
+                        return ''; // Hide for target line
+                    },
+                    font: {
+                        weight: 'bold'
+                    },
+                    color: '#333'
                 }
             }
         }
@@ -241,6 +272,11 @@ function loadChartData(indikatorId, areaId, year) {
                 // Update chart data
                 achievementChart.data.labels = response.labels;
                 achievementChart.data.datasets[0].data = response.data;
+                
+                // Create array of target values (same value for all months)
+                const targetData = Array(12).fill(response.target);
+                achievementChart.data.datasets[1].data = targetData;
+                
                 achievementChart.update();
                 
                 $('#chartContainer').show();
