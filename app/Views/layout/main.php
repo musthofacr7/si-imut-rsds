@@ -10,27 +10,27 @@
     <meta name="keywords" content="bootstrap 5, bootstrap, bootstrap 5 admin dashboard, bootstrap 5 dashboard, bootstrap 5 charts, bootstrap 5 calendar, bootstrap 5 datepicker, bootstrap 5 tables, bootstrap 5 datatable, vanilla js datatable, colorlibhq, adminlte, adminlte v4, adminlte v4.0.0-beta1">
 
     <!-- Fonts -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/source-sans-3@5.0.12/index.css">
+    <link rel="stylesheet" href="<?= base_url('assets/fonts/source-sans-3/index.css') ?>">
 
     <!-- Third Party Plugin(OverlayScrollbars) -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/overlayscrollbars@2.3.0/styles/overlayscrollbars.min.css">
+    <link rel="stylesheet" href="<?= base_url('assets/plugins/overlayscrollbars/styles/overlayscrollbars.min.css') ?>">
 
     <!-- Third Party Plugin(Bootstrap Icons) -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="<?= base_url('assets/plugins/bootstrap-icons/font/bootstrap-icons.min.css') ?>">
 
     <!-- Required Plugin(AdminLTE) -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/admin-lte@4.0.0-beta2/dist/css/adminlte.min.css">
+    <link rel="stylesheet" href="<?= base_url('assets/plugins/adminlte/css/adminlte.min.css') ?>">
     
     <!-- Select2 CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
-    <link href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.3.0/dist/select2-bootstrap-5-theme.min.css" rel="stylesheet" />
+    <link href="<?= base_url('assets/plugins/select2/css/select2.min.css') ?>" rel="stylesheet" />
+    <link href="<?= base_url('assets/plugins/select2/css/select2-bootstrap-5-theme.min.css') ?>" rel="stylesheet" />
     <!-- DataTables -->
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/dataTables.bootstrap5.min.css">
-    <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.5.0/css/responsive.bootstrap5.min.css">
-    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.4.2/css/buttons.bootstrap5.min.css">
+    <link rel="stylesheet" href="<?= base_url('assets/plugins/datatables/css/dataTables.bootstrap5.min.css') ?>">
+    <link rel="stylesheet" href="<?= base_url('assets/plugins/datatables/css/responsive.bootstrap5.min.css') ?>">
+    <link rel="stylesheet" href="<?= base_url('assets/plugins/datatables/css/buttons.bootstrap5.min.css') ?>">
     
     <!-- Summernote CSS -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.20/summernote-bs5.min.css" rel="stylesheet">
+    <link href="<?= base_url('assets/plugins/summernote/summernote-bs5.min.css') ?>" rel="stylesheet">
 </head>
 <body class="layout-fixed sidebar-expand-lg bg-body-tertiary">
     <div class="app-wrapper">
@@ -68,39 +68,39 @@
 
     <!-- Scripts -->
     <!-- jQuery (must be loaded first) -->
-    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="<?= base_url('assets/plugins/jquery/jquery.min.js') ?>"></script>
     
     <!-- Third Party Plugin(OverlayScrollbars) -->
-    <script src="https://cdn.jsdelivr.net/npm/overlayscrollbars@2.3.0/browser/overlayscrollbars.browser.es6.min.js"></script>
+    <script src="<?= base_url('assets/plugins/overlayscrollbars/js/overlayscrollbars.browser.es6.min.js') ?>"></script>
     
     <!-- Required Plugin(Popperjs for Bootstrap 5) -->
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
+    <script src="<?= base_url('assets/plugins/popper/popper.min.js') ?>"></script>
     
     <!-- Required Plugin(Bootstrap 5) -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js"></script>
+    <script src="<?= base_url('assets/plugins/bootstrap/js/bootstrap.min.js') ?>"></script>
     
     <!-- Required Plugin(AdminLTE) -->
-    <script src="https://cdn.jsdelivr.net/npm/admin-lte@4.0.0-beta2/dist/js/adminlte.min.js"></script>
+    <script src="<?= base_url('assets/plugins/adminlte/js/adminlte.min.js') ?>"></script>
     
     <!-- Select2 JS -->
-    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script src="<?= base_url('assets/plugins/select2/js/select2.min.js') ?>"></script>
     
     <!-- Summernote JS -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.20/summernote-bs5.min.js"></script>
+    <script src="<?= base_url('assets/plugins/summernote/summernote-bs5.min.js') ?>"></script>
 
     <!-- DataTables & Plugins -->
-    <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
-    <script src="https://cdn.datatables.net/1.13.7/js/dataTables.bootstrap5.min.js"></script>
-    <script src="https://cdn.datatables.net/responsive/2.5.0/js/dataTables.responsive.min.js"></script>
-    <script src="https://cdn.datatables.net/responsive/2.5.0/js/responsive.bootstrap5.min.js"></script>
-    <script src="https://cdn.datatables.net/buttons/2.4.2/js/dataTables.buttons.min.js"></script>
-    <script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.bootstrap5.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
-    <script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.html5.min.js"></script>
-    <script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.print.min.js"></script>
-    <script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.colVis.min.js"></script>
+    <script src="<?= base_url('assets/plugins/datatables/js/jquery.dataTables.min.js') ?>"></script>
+    <script src="<?= base_url('assets/plugins/datatables/js/dataTables.bootstrap5.min.js') ?>"></script>
+    <script src="<?= base_url('assets/plugins/datatables/js/dataTables.responsive.min.js') ?>"></script>
+    <script src="<?= base_url('assets/plugins/datatables/js/responsive.bootstrap5.min.js') ?>"></script>
+    <script src="<?= base_url('assets/plugins/datatables/js/dataTables.buttons.min.js') ?>"></script>
+    <script src="<?= base_url('assets/plugins/datatables/js/buttons.bootstrap5.min.js') ?>"></script>
+    <script src="<?= base_url('assets/plugins/datatables/js/jszip.min.js') ?>"></script>
+    <script src="<?= base_url('assets/plugins/datatables/js/pdfmake.min.js') ?>"></script>
+    <script src="<?= base_url('assets/plugins/datatables/js/vfs_fonts.js') ?>"></script>
+    <script src="<?= base_url('assets/plugins/datatables/js/buttons.html5.min.js') ?>"></script>
+    <script src="<?= base_url('assets/plugins/datatables/js/buttons.print.min.js') ?>"></script>
+    <script src="<?= base_url('assets/plugins/datatables/js/buttons.colVis.min.js') ?>"></script>
     
     <script>
         const SELECTOR_SIDEBAR_WRAPPER = ".sidebar-wrapper";
