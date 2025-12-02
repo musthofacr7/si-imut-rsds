@@ -33,6 +33,20 @@ Edit Indikator Mutu
                     </div>
 
                     <div class="row mb-3">
+                        <label for="dimensi_mutu" class="col-sm-3 col-form-label">Dimensi Mutu <span class="text-danger">*</span></label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" id="dimensi_mutu" name="dimensi_mutu" value="<?= old('dimensi_mutu', $indikator_mutu['dimensi_mutu'] ?? '') ?>" required>
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <label for="tujuan" class="col-sm-3 col-form-label">Tujuan <span class="text-danger">*</span></label>
+                        <div class="col-sm-9">
+                            <textarea class="form-control" id="tujuan" name="tujuan" rows="3" required><?= old('tujuan', $indikator_mutu['tujuan'] ?? '') ?></textarea>
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
                         <label for="jenis_indikator_id" class="col-sm-3 col-form-label">Jenis Indikator <span class="text-danger">*</span></label>
                         <div class="col-sm-9">
                             <select class="form-select select2" id="jenis_indikator_id" name="jenis_indikator_id" required>
@@ -87,10 +101,19 @@ Edit Indikator Mutu
 
                     <div class="row mb-3">
                         <label for="target_pencapaian" class="col-sm-3 col-form-label">Target Pencapaian <span class="text-danger">*</span></label>
-                        <div class="col-sm-5">
+                        <div class="col-sm-3">
+                            <select class="form-select" id="standar_target_pencapaian" name="standar_target_pencapaian" required>
+                                <option value="">Pilih Standar</option>
+                                <option value=">" <?= old('standar_target_pencapaian', $indikator_mutu['standar_target_pencapaian'] ?? '') == '>' ? 'selected' : '' ?>>></option>
+                                <option value="<" <?= old('standar_target_pencapaian', $indikator_mutu['standar_target_pencapaian'] ?? '') == '<' ? 'selected' : '' ?>><</option>
+                                <option value=">=" <?= old('standar_target_pencapaian', $indikator_mutu['standar_target_pencapaian'] ?? '') == '>=' ? 'selected' : '' ?>>>=</option>
+                                <option value="<=" <?= old('standar_target_pencapaian', $indikator_mutu['standar_target_pencapaian'] ?? '') == '<=' ? 'selected' : '' ?>><=</option>
+                            </select>
+                        </div>
+                        <div class="col-sm-3">
                             <input type="text" class="form-control" id="target_pencapaian" name="target_pencapaian" value="<?= old('target_pencapaian', $indikator_mutu['target_pencapaian']) ?>" required>
                         </div>
-                        <div class="col-sm-4">
+                        <div class="col-sm-3">
                             <select class="form-select" id="satuan_target_pencapaian" name="satuan_target_pencapaian" required>
                                 <option value="%" <?= old('satuan_target_pencapaian', $indikator_mutu['satuan_target_pencapaian'] ?? '%') == '%' ? 'selected' : '' ?>>%</option>
                                 <option value="menit" <?= old('satuan_target_pencapaian', $indikator_mutu['satuan_target_pencapaian'] ?? '') == 'menit' ? 'selected' : '' ?>>Menit</option>
@@ -186,6 +209,17 @@ Edit Indikator Mutu
                     ['font', ['bold', 'italic', 'underline', 'clear']],
                     ['para', ['ul', 'ol', 'paragraph']],
                     ['table', ['table']],
+                    ['insert', ['link']],
+                    ['view', ['fullscreen', 'codeview']]
+                ]
+            });
+
+            $('#tujuan').summernote({
+                height: 120,
+                toolbar: [
+                    ['style', ['style']],
+                    ['font', ['bold', 'italic', 'underline', 'clear']],
+                    ['para', ['ul', 'ol', 'paragraph']],
                     ['insert', ['link']],
                     ['view', ['fullscreen', 'codeview']]
                 ]

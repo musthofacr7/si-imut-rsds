@@ -14,12 +14,15 @@ class IndikatorMutuModel extends Model
     protected $protectFields = true;
     protected $allowedFields = [
         'judul_indikator',
+        'dimensi_mutu',
+        'tujuan',
         'jenis_indikator_id',
         'definisi_operasional',
         'numerator',
         'denumerator',
         'target_pencapaian',
         'satuan_target_pencapaian',
+        'standar_target_pencapaian',
         'kriteria_inklusi',
         'kriteria_eksklusi',
         'sumber_data',
@@ -40,12 +43,15 @@ class IndikatorMutuModel extends Model
     // Validation
     protected $validationRules = [
         'judul_indikator' => 'required|max_length[255]',
+        'dimensi_mutu' => 'required|max_length[255]',
+        'tujuan' => 'required',
         'jenis_indikator_id' => 'required|is_natural_no_zero',
         'definisi_operasional' => 'required',
         'numerator' => 'required',
         'denumerator' => 'required',
         'target_pencapaian' => 'required|max_length[255]',
         'satuan_target_pencapaian' => 'required|in_list[%,menit]',
+        'standar_target_pencapaian' => 'required|in_list[>,<,>=,<=]',
         'sumber_data' => 'required|max_length[255]',
         'status' => 'permit_empty|in_list[aktif,tidak aktif]',
     ];

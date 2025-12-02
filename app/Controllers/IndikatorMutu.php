@@ -36,12 +36,15 @@ class IndikatorMutu extends BaseController
 
         $data = [
             'judul_indikator' => $this->request->getPost('judul_indikator'),
+            'dimensi_mutu' => $this->request->getPost('dimensi_mutu'),
+            'tujuan' => $this->request->getPost('tujuan'),
             'jenis_indikator_id' => $this->request->getPost('jenis_indikator_id'),
             'definisi_operasional' => $this->request->getPost('definisi_operasional'),
             'numerator' => $this->request->getPost('numerator'),
             'denumerator' => $this->request->getPost('denumerator'),
             'target_pencapaian' => $this->request->getPost('target_pencapaian'),
             'satuan_target_pencapaian' => $this->request->getPost('satuan_target_pencapaian'),
+            'standar_target_pencapaian' => $this->request->getPost('standar_target_pencapaian'),
             'kriteria_inklusi' => $this->request->getPost('kriteria_inklusi'),
             'kriteria_eksklusi' => $this->request->getPost('kriteria_eksklusi'),
             'sumber_data' => $this->request->getPost('sumber_data'),
@@ -80,12 +83,15 @@ class IndikatorMutu extends BaseController
 
         $data = [
             'judul_indikator' => $this->request->getPost('judul_indikator'),
+            'dimensi_mutu' => $this->request->getPost('dimensi_mutu'),
+            'tujuan' => $this->request->getPost('tujuan'),
             'jenis_indikator_id' => $this->request->getPost('jenis_indikator_id'),
             'definisi_operasional' => $this->request->getPost('definisi_operasional'),
             'numerator' => $this->request->getPost('numerator'),
             'denumerator' => $this->request->getPost('denumerator'),
             'target_pencapaian' => $this->request->getPost('target_pencapaian'),
             'satuan_target_pencapaian' => $this->request->getPost('satuan_target_pencapaian'),
+            'standar_target_pencapaian' => $this->request->getPost('standar_target_pencapaian'),
             'kriteria_inklusi' => $this->request->getPost('kriteria_inklusi'),
             'kriteria_eksklusi' => $this->request->getPost('kriteria_eksklusi'),
             'sumber_data' => $this->request->getPost('sumber_data'),
