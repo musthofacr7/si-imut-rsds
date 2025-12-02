@@ -102,7 +102,7 @@ Edit Indikator Mutu
                     <div class="row mb-3">
                         <label for="target_pencapaian" class="col-sm-3 col-form-label">Target Pencapaian <span class="text-danger">*</span></label>
                         <div class="col-sm-3">
-                            <select class="form-select" id="standar_target_pencapaian" name="standar_target_pencapaian" required>
+                            <select class="form-select" id="standar_target_pencapaian" name="standar_target_pencapaian">
                                 <option value="">Pilih Standar</option>
                                 <option value=">" <?= old('standar_target_pencapaian', $indikator_mutu['standar_target_pencapaian'] ?? '') == '>' ? 'selected' : '' ?>>></option>
                                 <option value="<" <?= old('standar_target_pencapaian', $indikator_mutu['standar_target_pencapaian'] ?? '') == '<' ? 'selected' : '' ?>><</option>
