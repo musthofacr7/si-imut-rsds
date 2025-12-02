@@ -45,7 +45,7 @@ Indikator Mutu
                             <td><?= $index + 1 ?></td>
                             <td><?= esc($item['judul_indikator']) ?></td>
                             <td><?= esc($item['jenis_indikator']) ?></td>
-                            <td><?= esc($item['target_pencapaian']) ?> <?= esc($item['satuan_target_pencapaian'] ?? '%') ?></td>
+                            <td><?= esc($item['standar_target_pencapaian'] ?? '') ?> <?= esc($item['target_pencapaian']) ?> <?= esc($item['satuan_target_pencapaian'] ?? '%') ?></td>
                             <td>
                                 <?php if ($item['status'] == 'aktif') : ?>
                                     <span class="badge bg-success">Aktif</span>
