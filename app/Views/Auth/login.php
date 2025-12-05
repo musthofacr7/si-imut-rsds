@@ -3,16 +3,36 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <title>Login | IMUT RSDS</title>
+    <link rel="icon" href="<?= base_url('assets/img/logo-rsud.jpg') ?>">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/source-sans-3@5.0.12/index.css" integrity="sha256-tXJfXfp6Ewt1ilPzLDtQnJV4hclT9XuaZUKyUvmyr+Q=" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/overlayscrollbars@2.3.0/styles/overlayscrollbars.min.css" integrity="sha256-dSokZseQZAdnN1iOx72037vGt1Vzp/d8hZ9jvnIlCqU=" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.min.css" integrity="sha256-Qsx5lrStHZyR9REqhUF8iQt73X06c8LGIUPzpOhwRrI=" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/admin-lte@4.0.0-beta2/dist/css/adminlte.min.css" crossorigin="anonymous">
+    <style>
+        body.login-page::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('<?= base_url('assets/img/bg-login.jpg') ?>');
+            background-size: cover;
+            background-position: center;
+            opacity: 0.3; /* 70% transparent */
+            z-index: -1;
+        }
+    </style>
 </head>
 <body class="login-page bg-body-secondary">
     <div class="login-box">
         <div class="login-logo">
-            <a href="#"><b>IMUT</b>RSDS</a>
+            <a href="#">
+                <img src="<?= base_url('assets/img/logo-rsud.jpg') ?>" alt="Logo RSUD Soedirman" height="100" class="mb-2" style="mix-blend-mode: multiply;">
+                <br>
+                <b>IMUT</b>RSDS
+            </a>
         </div>
         <div class="card">
             <div class="card-body login-card-body">

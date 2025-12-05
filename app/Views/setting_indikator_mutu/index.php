@@ -27,7 +27,7 @@ Setting Indikator Mutu
             </div>
         <?php endif ?>
 
-        <table class="table table-striped">
+        <table class="table table-striped" id="table-setting">
             <thead>
                 <tr>
                     <th style="width: 10px">#</th>
@@ -71,4 +71,23 @@ Setting Indikator Mutu
         </table>
     </div>
 </div>
+<?= $this->endSection() ?>
+
+<?= $this->section('scripts') ?>
+<script>
+    $(document).ready(function() {
+        $('#table-setting').DataTable({
+            "pageLength": 10,
+            "lengthMenu": [
+                [10, 20, 25, 50, -1],
+                [10, 20, 25, 50, "All"]
+            ],
+            "responsive": true,
+            "autoWidth": false,
+            "language": {
+                "url": "<?= base_url('assets/plugins/datatables/i18n/id.json') ?>"
+            }
+        });
+    });
+</script>
 <?= $this->endSection() ?>

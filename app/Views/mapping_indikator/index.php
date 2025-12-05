@@ -35,7 +35,7 @@ Mapping Indikator Per Area Pengukuran
                 </form>
 
                 <div class="table-responsive">
-                    <table class="table table-bordered table-striped table-hover">
+                    <table class="table table-bordered table-striped table-hover" id="table-mapping">
                         <thead class="table-light">
                             <tr>
                                 <th style="width: 5%">No</th>
@@ -71,115 +71,21 @@ Mapping Indikator Per Area Pengukuran
 <?= $this->endSection() ?>
 
 <?= $this->section('scripts') ?>
-<!-- Modal Detail Indikator -->
-<div class="modal fade" id="modalDetail" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-lg modal-dialog-scrollable">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Detail Indikator Mutu</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <div class="row mb-3">
-                    <label class="col-sm-4 col-form-label fw-bold">Judul Indikator</label>
-                    <div class="col-sm-8">
-                        <p id="detail_judul_indikator" class="form-control-plaintext border-bottom"></p>
-                    </div>
-                </div>
-                <div class="row mb-3">
-                    <label class="col-sm-4 col-form-label fw-bold">Jenis Indikator</label>
-                    <div class="col-sm-8">
-                        <p id="detail_jenis_indikator" class="form-control-plaintext border-bottom"></p>
-                    </div>
-                </div>
-                <div class="row mb-3">
-                    <label class="col-sm-4 col-form-label fw-bold">Status</label>
-                    <div class="col-sm-8">
-                        <p id="detail_status" class="form-control-plaintext border-bottom"></p>
-                    </div>
-                </div>
-                <div class="row mb-3">
-                    <label class="col-sm-4 col-form-label fw-bold">Definisi Operasional</label>
-                    <div class="col-sm-8">
-                        <div id="detail_definisi_operasional" class="p-2 bg-light rounded border"></div>
-                    </div>
-                </div>
-                <div class="row mb-3">
-                    <label class="col-sm-4 col-form-label fw-bold">Numerator</label>
-                    <div class="col-sm-8">
-                        <div id="detail_numerator" class="p-2 bg-light rounded border"></div>
-                    </div>
-                </div>
-                <div class="row mb-3">
-                    <label class="col-sm-4 col-form-label fw-bold">Denumerator</label>
-                    <div class="col-sm-8">
-                        <div id="detail_denumerator" class="p-2 bg-light rounded border"></div>
-                    </div>
-                </div>
-                <div class="row mb-3">
-                    <label class="col-sm-4 col-form-label fw-bold">Target Pencapaian</label>
-                    <div class="col-sm-8">
-                        <p id="detail_target_pencapaian" class="form-control-plaintext border-bottom"></p>
-                    </div>
-                </div>
-                <div class="row mb-3">
-                    <label class="col-sm-4 col-form-label fw-bold">Kriteria Inklusi</label>
-                    <div class="col-sm-8">
-                        <div id="detail_kriteria_inklusi" class="p-2 bg-light rounded border"></div>
-                    </div>
-                </div>
-                <div class="row mb-3">
-                    <label class="col-sm-4 col-form-label fw-bold">Kriteria Eksklusi</label>
-                    <div class="col-sm-8">
-                        <div id="detail_kriteria_eksklusi" class="p-2 bg-light rounded border"></div>
-                    </div>
-                </div>
-                <div class="row mb-3">
-                    <label class="col-sm-4 col-form-label fw-bold">Sumber Data</label>
-                    <div class="col-sm-8">
-                        <p id="detail_sumber_data" class="form-control-plaintext border-bottom"></p>
-                    </div>
-                </div>
-                <div class="row mb-3">
-                    <label class="col-sm-4 col-form-label fw-bold">Frekuensi Pengumpulan Data</label>
-                    <div class="col-sm-8">
-                        <p id="detail_frekuensi_pengumpulan_data" class="form-control-plaintext border-bottom"></p>
-                    </div>
-                </div>
-                <div class="row mb-3">
-                    <label class="col-sm-4 col-form-label fw-bold">Periode Analisis Data</label>
-                    <div class="col-sm-8">
-                        <p id="detail_periode_analisis_data" class="form-control-plaintext border-bottom"></p>
-                    </div>
-                </div>
-                <div class="row mb-3">
-                    <label class="col-sm-4 col-form-label fw-bold">Rencana Analisis</label>
-                    <div class="col-sm-8">
-                        <div id="detail_rencana_analisis" class="p-2 bg-light rounded border"></div>
-                    </div>
-                </div>
-                <div class="row mb-3">
-                    <label class="col-sm-4 col-form-label fw-bold">Instrumen Pengambilan Data</label>
-                    <div class="col-sm-8">
-                        <p id="detail_instrumen_pengambilan_data" class="form-control-plaintext border-bottom"></p>
-                    </div>
-                </div>
-                <div class="row mb-3">
-                    <label class="col-sm-4 col-form-label fw-bold">Area Pengukuran (Default)</label>
-                    <div class="col-sm-8">
-                        <p id="detail_area_pengukuran" class="form-control-plaintext border-bottom"></p>
-                    </div>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
-            </div>
-        </div>
-    </div>
-</div>
-
 <script>
 $(document).ready(function() {
+    $('#table-mapping').DataTable({
+        "pageLength": 10,
+        "lengthMenu": [
+            [10, 20, 25, 50, -1],
+            [10, 20, 25, 50, "All"]
+        ],
+        "responsive": true,
+        "autoWidth": false,
+        "language": {
+            "url": "<?= base_url('assets/plugins/datatables/i18n/id.json') ?>"
+        }
+    });
+
     $('.view-detail').on('click', function(e) {
         e.preventDefault();
         const id = $(this).data('id');
