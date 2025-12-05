@@ -84,14 +84,26 @@ Create User
     </div>
 </div>
 
+<?= $this->endSection() ?>
+
+<?= $this->section('scripts') ?>
 <script>
-document.getElementById('role').addEventListener('change', function() {
-    const areaField = document.getElementById('area-pengukuran-field');
-    if (this.value === 'pj-mutu') {
-        areaField.style.display = '';
-    } else {
-        areaField.style.display = 'none';
+$(document).ready(function() {
+    function toggleAreaField() {
+        if ($('#role').val() === 'pj-mutu') {
+            $('#area-pengukuran-field').show();
+        } else {
+            $('#area-pengukuran-field').hide();
+        }
     }
+
+    // Initial check
+    toggleAreaField();
+
+    // On change
+    $('#role').on('change', function() {
+        toggleAreaField();
+    });
 });
 </script>
 <?= $this->endSection() ?>

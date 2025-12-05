@@ -131,8 +131,10 @@ class Users extends BaseController
 
         $user->fill($data);
 
-        if (! $this->userModel->save($user)) {
-            return redirect()->back()->withInput()->with('errors', $this->userModel->errors());
+        if ($user->hasChanged()) {
+            if (! $this->userModel->save($user)) {
+                return redirect()->back()->withInput()->with('errors', $this->userModel->errors());
+            }
         }
 
         // Update group
