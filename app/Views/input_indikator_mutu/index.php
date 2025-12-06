@@ -16,7 +16,7 @@ Input Indikator Mutu RS
                     <div class="col-md-6 text-center">
                         <!-- Month/Year Selector -->
                         <form method="GET" action="<?= base_url('input-indikator-mutu') ?>" class="form-inline d-inline">
-                            <div class="input-group input-group-sm d-inline-flex" style="width: auto;">
+                            <div class="input-group input-group-sm d-inline-flex" style="width: auto; min-width: 300px;">
                                 <select name="month" class="form-select form-select-sm select2">
                                     <?php 
                                     $indoMonths = [
