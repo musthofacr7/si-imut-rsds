@@ -110,6 +110,18 @@ class IndikatorMutu extends BaseController
         return redirect()->to('indikator-mutu')->with('message', 'Indikator Mutu berhasil diperbarui');
     }
 
+    public function show($id)
+    {
+        $data['indikator_mutu'] = $this->indikatorMutuModel->find($id);
+
+        if (!$data['indikator_mutu']) {
+            return redirect()->to('indikator-mutu')->with('error', 'Data tidak ditemukan');
+        }
+
+        $data['jenis_indikator'] = $this->jenisIndikatorModel->findAll();
+        return view('indikator_mutu/show', $data);
+    }
+
     public function delete($id)
     {
         // Check if indicator has input data
