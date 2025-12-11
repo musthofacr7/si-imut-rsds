@@ -78,6 +78,13 @@
                     </a>
                 </li>
                 <?php endif; ?>
+
+                <li class="nav-item">
+                    <a href="<?= base_url('pdsa') ?>" class="nav-link">
+                        <i class="nav-icon bi bi-clipboard-check"></i>
+                        <p>PDSA</p>
+                    </a>
+                </li>
                 <li class="nav-item">
                     <a href="<?= base_url('logout') ?>" class="nav-link">
                         <i class="nav-icon bi bi-box-arrow-right"></i>

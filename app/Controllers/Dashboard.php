@@ -102,10 +102,31 @@ class Dashboard extends BaseController
             }
         }
 
+        // Admin Stats
+        $adminStats = [];
+        if (in_groups('administrator')) {
+            $db = \Config\Database::connect();
+            
+            // Count indicators per jenis_indikator
+            $indicatorCounts = $db->table('indikator_mutu')
+                ->select('jenis_indikator.jenis_indikator as nama_jenis_indikator, COUNT(indikator_mutu.id) as total')
+                ->join('jenis_indikator', 'jenis_indikator.id = indikator_mutu.jenis_indikator_id')
+                ->groupBy('jenis_indikator.jenis_indikator')
+                ->get()
+                ->getResultArray();
+                
+            $adminStats['indicators'] = $indicatorCounts;
+            
+            // Count total area pengukuran
+            $areaCount = $db->table('area_pengukuran')->countAllResults();
+            $adminStats['total_areas'] = $areaCount;
+        }
+
         return view('dashboard/index', [
             'chartData' => $chartData,
             'monthLabels' => $monthLabels ?? [],
-            'selectedYear' => $selectedYear
+            'selectedYear' => $selectedYear,
+            'adminStats' => $adminStats
         ]);
     }
 }

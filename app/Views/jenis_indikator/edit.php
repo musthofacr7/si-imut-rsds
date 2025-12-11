@@ -6,7 +6,7 @@ Edit Jenis Indikator
 
 <?= $this->section('content') ?>
 <div class="row">
-    <div class="col-md-6">
+    <div class="col-md-12">
         <div class="card card-primary card-outline mb-4">
             <div class="card-header">
                 <h3 class="card-title">Edit Jenis Indikator</h3>
@@ -35,7 +35,7 @@ Edit Jenis Indikator
                     <div class="row mb-3">
                         <label for="deskripsi" class="col-sm-3 col-form-label">Deskripsi</label>
                         <div class="col-sm-9">
-                            <input type="text" class="form-control" id="deskripsi" name="deskripsi" value="<?= old('deskripsi', $jenis_indikator['deskripsi']) ?>" required>
+                            <textarea class="form-control" id="deskripsi" name="deskripsi" required><?= old('deskripsi', $jenis_indikator['deskripsi']) ?></textarea>
                         </div>
                     </div>
                 </div>

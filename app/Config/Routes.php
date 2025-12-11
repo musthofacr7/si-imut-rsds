@@ -125,4 +125,15 @@ $routes->group('rekap-indikator-mutu', ['filter' => 'role:administrator'], funct
     $routes->post('get-chart-data', 'RekapIndikatorMutu::getChartData');
 });
 
+// PDSA Routes (Protected, Administrator & PJ Mutu)
+$routes->group('pdsa', ['filter' => 'login'], function($routes) {
+    $routes->get('/', 'PDSA::index');
+    $routes->get('create', 'PDSA::create');
+    $routes->post('store', 'PDSA::store');
+    $routes->get('view/(:num)', 'PDSA::view/$1'); // New View Route
+    $routes->get('edit/(:num)', 'PDSA::edit/$1');
+    $routes->post('update/(:num)', 'PDSA::update/$1');
+    $routes->get('delete/(:num)', 'PDSA::delete/$1');
+});
+
 

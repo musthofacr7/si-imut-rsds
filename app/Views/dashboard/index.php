@@ -5,6 +5,49 @@ Dashboard
 <?= $this->endSection() ?>
 
 <?= $this->section('content') ?>
+
+<?php if (in_groups('administrator') && !empty($adminStats)): ?>
+<div class="row mb-4">
+    <!-- Area Pengukuran Check -->
+    <div class="col-md-3">
+        <div class="card bg-primary text-white mb-3">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h6 class="card-title mb-0">Total Area Pengukuran</h6>
+                        <h2 class="mt-2 mb-0"><?= $adminStats['total_areas'] ?></h2>
+                    </div>
+                    <i class="bi bi-geo-alt fs-1 opacity-50"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Indicators per Type -->
+    <?php 
+    $colors = ['bg-success', 'bg-danger', 'bg-warning', 'bg-info', 'bg-secondary', 'bg-dark'];
+    $textColors = ['text-white', 'text-white', 'text-dark', 'text-dark', 'text-white', 'text-white'];
+    foreach ($adminStats['indicators'] as $index => $stat): 
+        $colorClass = $colors[$index % count($colors)];
+        $textColorClass = $textColors[$index % count($textColors)];
+    ?>
+    <div class="col-md-3">
+        <div class="card <?= $colorClass ?> <?= $textColorClass ?> mb-3">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h6 class="card-title mb-0"><?= esc($stat['nama_jenis_indikator']) ?></h6>
+                        <h2 class="mt-2 mb-0"><?= $stat['total'] ?></h2>
+                    </div>
+                    <i class="bi bi-list-check fs-1 opacity-50"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+    <?php endforeach; ?>
+</div>
+<?php endif; ?>
+
 <div class="row">
     <div class="col-md-12">
         <div class="card mb-4">
@@ -17,6 +60,8 @@ Dashboard
         </div>
     </div>
 </div>
+
+
 
 <?php if (!empty($chartData)): ?>
 <div class="row">
