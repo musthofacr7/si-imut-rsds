@@ -70,13 +70,17 @@ class IndikatorMutuModel extends Model
     protected $skipValidation = false;
 
     // Get data with jenis indikator
-    public function getWithJenisIndikator($id = null)
+    public function getWithJenisIndikator($id = null, $jenisIndikatorId = null)
     {
         $builder = $this->select('indikator_mutu.*, jenis_indikator.jenis_indikator')
                         ->join('jenis_indikator', 'jenis_indikator.id = indikator_mutu.jenis_indikator_id');
         
         if ($id !== null) {
             return $builder->where('indikator_mutu.id', $id)->first();
+        }
+
+        if ($jenisIndikatorId !== null && $jenisIndikatorId !== '') {
+            $builder->where('indikator_mutu.jenis_indikator_id', $jenisIndikatorId);
         }
         
         return $builder->findAll();

@@ -90,7 +90,10 @@ class PDSA extends BaseController
         }
 
         $rules = [
-            'file_pdsa' => 'uploaded[file_pdsa]|max_size[file_pdsa,5120]|ext_in[file_pdsa,pdf,doc,docx,xls,xlsx,jpg,jpeg,png]',
+            'file_pdsa' => [
+                'rules' => 'uploaded[file_pdsa]|max_size[file_pdsa,10240]|mime_in[file_pdsa,application/pdf,application/force-download,application/x-download,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,image/jpeg,image/png,image/jpg]|ext_in[file_pdsa,pdf,doc,docx,xls,xlsx,jpg,jpeg,png]',
+                'label' => 'File PDSA'
+            ],
             'deskripsi' => 'required',
         ];
 
@@ -203,7 +206,7 @@ class PDSA extends BaseController
             
             $file = $this->request->getFile('file_pdsa');
             if ($file && $file->isValid() && !$file->hasMoved()) {
-                 $rules['file_pdsa'] = 'max_size[file_pdsa,5120]|ext_in[file_pdsa,pdf,doc,docx,xls,xlsx,jpg,jpeg,png]';
+                 $rules['file_pdsa'] = 'max_size[file_pdsa,10240]|mime_in[file_pdsa,application/pdf,application/force-download,application/x-download,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,image/jpeg,image/png,image/jpg]|ext_in[file_pdsa,pdf,doc,docx,xls,xlsx,jpg,jpeg,png]';
             }
 
             if (!$this->validate($rules)) {

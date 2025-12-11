@@ -6,8 +6,20 @@ Indikator Mutu
 
 <?= $this->section('content') ?>
 <div class="card mb-4">
-    <div class="card-header">
+    <div class="card-header d-flex align-items-center">
         <h3 class="card-title">Daftar Indikator Mutu</h3>
+        
+        <form action="" method="get" class="mx-auto" style="min-width: 250px;">
+            <select name="jenis_indikator_id" class="form-select form-select-sm" onchange="this.form.submit()">
+                <option value="">-- Semua Jenis Indikator --</option>
+                <?php foreach ($jenis_indikator as $jenis) : ?>
+                    <option value="<?= $jenis['id'] ?>" <?= ($selected_jenis_indikator == $jenis['id']) ? 'selected' : '' ?>>
+                        <?= esc($jenis['jenis_indikator']) ?>
+                    </option>
+                <?php endforeach ?>
+            </select>
+        </form>
+
         <div class="card-tools">
             <a href="<?= base_url('indikator-mutu/create') ?>" class="btn btn-primary btn-sm">
                 <i class="bi bi-plus-lg"></i> Tambah Indikator Mutu

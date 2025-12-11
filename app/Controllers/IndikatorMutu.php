@@ -18,7 +18,12 @@ class IndikatorMutu extends BaseController
 
     public function index()
     {
-        $data['indikator_mutu'] = $this->indikatorMutuModel->getWithJenisIndikator();
+        $jenisIndikatorId = $this->request->getGet('jenis_indikator_id');
+        
+        $data['indikator_mutu'] = $this->indikatorMutuModel->getWithJenisIndikator(null, $jenisIndikatorId);
+        $data['jenis_indikator'] = $this->jenisIndikatorModel->findAll();
+        $data['selected_jenis_indikator'] = $jenisIndikatorId;
+        
         return view('indikator_mutu/index', $data);
     }
 
