@@ -65,7 +65,20 @@ Rekap Indikator Mutu RS
             <div class="col-md-12">
                 <div class="card">
                     <div class="card-header">
-                        <h5 class="card-title mb-0" id="chartTitle">Grafik Pencapaian Indikator Mutu</h5>
+                        <div class="d-flex justify-content-between align-items-center mb-0">
+                            <h5 class="card-title mb-0" id="chartTitle">Grafik Pencapaian Indikator Mutu</h5>
+                            <div class="btn-group btn-group-sm" role="group" aria-label="Chart Type">
+                                <input type="radio" class="btn-check" name="chartType" id="typeBar" value="bar" checked>
+                                <label class="btn btn-outline-primary" for="typeBar">
+                                    <i class="bi bi-bar-chart-fill"></i> Bar
+                                </label>
+
+                                <input type="radio" class="btn-check" name="chartType" id="typeLine" value="line">
+                                <label class="btn btn-outline-primary" for="typeLine">
+                                    <i class="bi bi-graph-up"></i> Line
+                                </label>
+                            </div>
+                        </div>
                     </div>
                     <div class="card-body">
                         <div id="chartLoading" class="text-center py-5" style="display: none;">
@@ -158,6 +171,17 @@ $(document).ready(function() {
         }
 
         loadChartData(indikatorId, areaId, year);
+    });
+
+    // Handle Chart Type Change
+    $('input[name="chartType"]').change(function() {
+        const type = $(this).val();
+        if (achievementChart) {
+            // Destroy and re-init to ensure clean state or just update config
+            // Simple config update is usually enough for type switch if datasets are compatible
+            achievementChart.config.type = type;
+            achievementChart.update();
+        }
     });
 });
 
@@ -287,7 +311,7 @@ function loadChartData(indikatorId, areaId, year) {
                 const satuan = response.satuan || '%';
                 
                 // Update Y-axis
-                achievementChart.options.scales.y.max = satuan === '%' ? 100 : undefined;
+                achievementChart.options.scales.y.max = satuan === '%' ? 115 : undefined;
                 achievementChart.options.scales.y.ticks.callback = function(value) {
                     return satuan === '%' ? value + '%' : value;
                 };

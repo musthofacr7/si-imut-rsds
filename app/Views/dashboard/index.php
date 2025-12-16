@@ -81,8 +81,20 @@ Dashboard
                                 <i class="bi bi-image"></i> PNG
                             </button>
                             <button type="button" class="btn btn-outline-success" id="btnExportExcel" title="Export Excel">
+                            <button type="button" class="btn btn-outline-success" id="btnExportExcel" title="Export Excel">
                                 <i class="bi bi-file-excel"></i> Excel
                             </button>
+                        </div>
+                        <div class="btn-group btn-group-sm ms-2" role="group" aria-label="Chart Type">
+                            <input type="radio" class="btn-check" name="dashboardChartType" id="dashTypeBar" value="bar" checked>
+                            <label class="btn btn-outline-primary" for="dashTypeBar">
+                                <i class="bi bi-bar-chart-fill"></i> Bar
+                            </label>
+
+                            <input type="radio" class="btn-check" name="dashboardChartType" id="dashTypeLine" value="line">
+                            <label class="btn btn-outline-primary" for="dashTypeLine">
+                                <i class="bi bi-graph-up"></i> Line
+                            </label>
                         </div>
                     </div>
                     <div class="col-md-3 text-end">
@@ -142,6 +154,17 @@ const monthLabels = <?= json_encode($monthLabels) ?>;
 const chartData = <?= json_encode($chartData) ?>;
 const selectedYear = '<?= $selectedYear ?>';
 const chartInstances = [];
+
+// Handle Chart Type Toggle
+document.querySelectorAll('input[name="dashboardChartType"]').forEach(input => {
+    input.addEventListener('change', function(e) {
+        const type = e.target.value;
+        chartInstances.forEach(chart => {
+            chart.config.type = type;
+            chart.update();
+        });
+    });
+});
 
 // Color palette for charts
 const colors = [
@@ -335,7 +358,7 @@ chartData.forEach((data, index) => {
                 scales: {
                     y: {
                         beginAtZero: true,
-                        max: data.satuan === '%' ? 100 : undefined,
+                        max: data.satuan === '%' ? 115 : undefined,
                         ticks: {
                             callback: function(value) {
                                 if (data.satuan === '%') {
