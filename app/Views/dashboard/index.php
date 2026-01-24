@@ -72,7 +72,7 @@ Dashboard
                     <div class="col-md-5">
                         <h3 class="card-title mb-0">Capaian Indikator Mutu Tahun <?= $selectedYear ?></h3>
                     </div>
-                    <div class="col-md-4 text-center">
+                    <div class="col-md-3 text-center">
                         <div class="btn-group btn-group-sm" role="group">
                             <button type="button" class="btn btn-outline-danger" id="btnExportPDF" title="Export PDF">
                                 <i class="bi bi-file-pdf"></i> PDF
@@ -81,10 +81,12 @@ Dashboard
                                 <i class="bi bi-image"></i> PNG
                             </button>
                             <button type="button" class="btn btn-outline-success" id="btnExportExcel" title="Export Excel">
-                            <button type="button" class="btn btn-outline-success" id="btnExportExcel" title="Export Excel">
                                 <i class="bi bi-file-excel"></i> Excel
                             </button>
                         </div>
+                        
+                    </div>
+                    <div class="col-md-2 text-center">
                         <div class="btn-group btn-group-sm ms-2" role="group" aria-label="Chart Type">
                             <input type="radio" class="btn-check" name="dashboardChartType" id="dashTypeBar" value="bar" checked>
                             <label class="btn btn-outline-primary" for="dashTypeBar">
@@ -96,8 +98,8 @@ Dashboard
                                 <i class="bi bi-graph-up"></i> Line
                             </label>
                         </div>
-                    </div>
-                    <div class="col-md-3 text-end">
+</div>
+                    <div class="col-md-2 text-end">
                         <form method="GET" action="<?= base_url('dashboard') ?>" class="d-inline">
                             <div class="input-group input-group-sm d-inline-flex" style="min-width: 100;">
                                 <select name="year" class="form-select form-select-sm select2" onchange="this.form.submit()">
