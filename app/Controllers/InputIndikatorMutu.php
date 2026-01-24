@@ -62,9 +62,11 @@ class InputIndikatorMutu extends BaseController
             ->select('setting_indikator_mutu.indikator_mutu_id, setting_indikator_mutu.area_pengukuran_id, 
                       indikator_mutu.judul_indikator, indikator_mutu.numerator, indikator_mutu.denumerator,
                       indikator_mutu.satuan_target_pencapaian,
-                      area_pengukuran.area_pengukuran')
+                      area_pengukuran.area_pengukuran,
+                      jenis_indikator.jenis_indikator')
             ->join('indikator_mutu', 'indikator_mutu.id = setting_indikator_mutu.indikator_mutu_id')
-            ->join('area_pengukuran', 'area_pengukuran.id = setting_indikator_mutu.area_pengukuran_id');
+            ->join('area_pengukuran', 'area_pengukuran.id = setting_indikator_mutu.area_pengukuran_id')
+            ->join('jenis_indikator', 'jenis_indikator.id = indikator_mutu.jenis_indikator_id');
         
         // Filter by user's areas if not administrator or if user has assigned areas
         if ($areaIds !== null) {
@@ -72,7 +74,7 @@ class InputIndikatorMutu extends BaseController
         }
         
         $settings = $query
-            ->orderBy('area_pengukuran.area_pengukuran', 'ASC')
+            ->orderBy('jenis_indikator.jenis_indikator', 'ASC')
             ->orderBy('indikator_mutu.judul_indikator', 'ASC')
             ->findAll();
         

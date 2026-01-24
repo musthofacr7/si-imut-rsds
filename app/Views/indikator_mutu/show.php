@@ -167,6 +167,12 @@ Detail Indikator Mutu
             </div>
             <div class="card-footer">
                 <a href="<?= base_url('indikator-mutu') ?>" class="btn btn-secondary">Kembali</a>
+                <a href="<?= base_url('indikator-mutu/export-pdf/' . $indikator_mutu['id']) ?>" class="btn btn-danger float-right ml-2" target="_blank">
+                    <i class="fas fa-file-pdf"></i> Download PDF
+                </a>
+                <a href="<?= base_url('indikator-mutu/export-word/' . $indikator_mutu['id']) ?>" class="btn btn-primary float-right">
+                    <i class="fas fa-file-word"></i> Download Word
+                </a>
             </div>
         </div>
     </div>

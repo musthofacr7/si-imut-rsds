@@ -6,18 +6,21 @@ use Myth\Auth\Entities\User;
 use Myth\Auth\Models\UserModel;
 use Myth\Auth\Authorization\GroupModel;
 use App\Models\AreaPengukuranModel;
+use App\Models\UserAreaPengukuranModel;
 
 class Users extends BaseController
 {
     protected $userModel;
     protected $groupModel;
     protected $areaPengukuranModel;
+    protected $userAreaPengukuranModel;
 
     public function __construct()
     {
         $this->userModel = new UserModel();
         $this->groupModel = new GroupModel();
         $this->areaPengukuranModel = new AreaPengukuranModel();
+        $this->userAreaPengukuranModel = new UserAreaPengukuranModel();
     }
 
     public function index()
@@ -27,6 +30,7 @@ class Users extends BaseController
         // Get groups for each user
         foreach ($users as $user) {
             $user->groups = $this->groupModel->getGroupsForUser($user->id);
+            $user->areas = $this->userAreaPengukuranModel->getUserAreas($user->id);
         }
 
         return view('users/index', ['users' => $users]);

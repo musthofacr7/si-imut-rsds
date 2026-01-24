@@ -34,6 +34,7 @@ User Management
                     <th>Username</th>
                     <th>Email</th>
                     <th>Role</th>
+                    <th>Area Pengukuran</th>
                     <th style="width: 150px">Action</th>
                 </tr>
             </thead>
@@ -47,6 +48,15 @@ User Management
                             <?php foreach ($user->groups as $group) : ?>
                                 <span class="badge text-bg-secondary"><?= $group['name'] ?></span>
                             <?php endforeach ?>
+                        </td>
+                        <td>
+                            <?php if (!empty($user->areas)) : ?>
+                                <?php foreach ($user->areas as $area) : ?>
+                                    <span class="badge text-bg-info"><?= esc($area['area_pengukuran']) ?></span>
+                                <?php endforeach ?>
+                            <?php else : ?>
+                                -
+                            <?php endif ?>
                         </td>
                         <td>
                             <a href="<?= base_url('users/edit/' . $user->id) ?>" class="btn btn-sm btn-warning">

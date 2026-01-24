@@ -21,6 +21,9 @@ Indikator Mutu
         </form>
 
         <div class="card-tools">
+            <a href="<?= base_url('indikator-mutu/export-pdf-all') . ($selected_jenis_indikator ? '?jenis_indikator_id=' . $selected_jenis_indikator : '') ?>" class="btn btn-danger btn-sm me-2" target="_blank">
+                <i class="bi bi-file-pdf"></i> Export PDF
+            </a>
             <a href="<?= base_url('indikator-mutu/create') ?>" class="btn btn-primary btn-sm">
                 <i class="bi bi-plus-lg"></i> Tambah Indikator Mutu
             </a>

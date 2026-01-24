@@ -89,7 +89,7 @@ Input Indikator Mutu RS
                                                     <?= esc($indikator['judul_indikator']) ?>
                                                 </a>
                                             </strong>
-                                            <br><small class="text-muted"><?= esc($indikator['area_pengukuran']) ?></small>
+                                            <br><small class="text-muted"><?= esc($indikator['jenis_indikator']) ?></small>
                                         </td>
                                         <td style="position: sticky; left: 250px; background: white; z-index: 5;" class="p-1 align-middle">
                                             <span class="fw-bold">Numerator</span>

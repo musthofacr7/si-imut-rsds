@@ -4,6 +4,8 @@ namespace App\Controllers;
 
 use App\Models\IndikatorMutuModel;
 use App\Models\JenisIndikatorModel;
+use Dompdf\Dompdf;
+use Dompdf\Options;
 
 class IndikatorMutu extends BaseController
 {
@@ -139,5 +141,100 @@ class IndikatorMutu extends BaseController
         }
 
         return redirect()->to('indikator-mutu')->with('message', 'Indikator Mutu berhasil dihapus');
+    }
+    public function exportPdf($id)
+    {
+        $data['indikator_mutu'] = $this->indikatorMutuModel->find($id);
+
+        if (!$data['indikator_mutu']) {
+            return redirect()->to('indikator-mutu')->with('error', 'Data tidak ditemukan');
+        }
+
+        $data['jenis_indikator'] = $this->jenisIndikatorModel->findAll();
+
+        $html = view('indikator_mutu/pdf_export', $data);
+
+        $options = new Options();
+        $options->set('isRemoteEnabled', true);
+        
+        $dompdf = new Dompdf($options);
+        $dompdf->loadHtml($html);
+        $dompdf->setPaper('A4', 'portrait');
+        $dompdf->render();
+
+        $filename = 'Profil_Indikator_Mutu_' . $data['indikator_mutu']['judul_indikator'] . '.pdf';
+        
+        // Clean filename just in case
+        $filename = preg_replace('/[^A-Za-z0-9_\-]/', '_', $filename) . '.pdf';
+
+        $dompdf->stream($filename, ["Attachment" => true]);
+    }
+
+    public function exportPdfAll()
+    {
+        $jenisIndikatorId = $this->request->getGet('jenis_indikator_id');
+
+        // Build query manually to join and sort
+        $builder = $this->indikatorMutuModel->builder();
+        $builder->select('indikator_mutu.*, jenis_indikator.jenis_indikator as jenis_indikator_nama');
+        $builder->join('jenis_indikator', 'jenis_indikator.id = indikator_mutu.jenis_indikator_id');
+
+        if ($jenisIndikatorId) {
+            $builder->where('indikator_mutu.jenis_indikator_id', $jenisIndikatorId);
+        }
+
+        // Sort by jenis_indikator, then by judul_indikator
+        $builder->orderBy('jenis_indikator.jenis_indikator', 'ASC');
+        $builder->orderBy('indikator_mutu.judul_indikator', 'ASC');
+
+        $data['indikator_mutu_list'] = $builder->get()->getResultArray();
+        $data['jenis_indikator'] = $this->jenisIndikatorModel->findAll(); // Still needed for lookups if referenced differently, or we can use the joined name
+
+        if (empty($data['indikator_mutu_list'])) {
+            return redirect()->back()->with('error', 'Tidak ada data untuk diexport');
+        }
+
+        $html = view('indikator_mutu/pdf_export_all', $data);
+
+        $options = new Options();
+        $options->set('isRemoteEnabled', true);
+        
+        $dompdf = new Dompdf($options);
+        $dompdf->loadHtml($html);
+        $dompdf->setPaper('A4', 'portrait');
+        $dompdf->render();
+
+        $filename = 'Profil_Indikator_Mutu_All.pdf';
+        if ($jenisIndikatorId) {
+             // Find name for filename
+             foreach($data['jenis_indikator'] as $j) {
+                 if($j['id'] == $jenisIndikatorId) {
+                     $filename = 'Profil_Indikator_Mutu_' . preg_replace('/[^A-Za-z0-9_\-]/', '_', $j['jenis_indikator']) . '.pdf';
+                     break;
+                 }
+             }
+        }
+
+        $dompdf->stream($filename, ["Attachment" => true]);
+    }
+
+    public function exportWord($id)
+    {
+        $data['indikator_mutu'] = $this->indikatorMutuModel->find($id);
+
+        if (!$data['indikator_mutu']) {
+            return redirect()->to('indikator-mutu')->with('error', 'Data tidak ditemukan');
+        }
+
+        $data['jenis_indikator'] = $this->jenisIndikatorModel->findAll();
+
+        $filename = 'Profil_Indikator_Mutu_' . $data['indikator_mutu']['judul_indikator'] . '.doc';
+        $filename = preg_replace('/[^A-Za-z0-9_\-]/', '_', $filename) . '.doc';
+
+        header("Content-type: application/vnd.ms-word");
+        header("Content-Disposition: attachment;Filename=" . $filename);
+
+        echo view('indikator_mutu/word_export', $data);
+        exit;
     }
 }

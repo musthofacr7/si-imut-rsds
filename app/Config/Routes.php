@@ -66,6 +66,9 @@ $routes->group('indikator-mutu', ['filter' => 'role:administrator'], function($r
     $routes->get('create', 'IndikatorMutu::create');
     $routes->post('store', 'IndikatorMutu::store');
     $routes->get('show/(:num)', 'IndikatorMutu::show/$1');
+    $routes->get('export-pdf-all', 'IndikatorMutu::exportPdfAll');
+    $routes->get('export-pdf/(:num)', 'IndikatorMutu::exportPdf/$1');
+    $routes->get('export-word/(:num)', 'IndikatorMutu::exportWord/$1');
     $routes->get('edit/(:num)', 'IndikatorMutu::edit/$1');
     $routes->post('update/(:num)', 'IndikatorMutu::update/$1');
     $routes->get('delete/(:num)', 'IndikatorMutu::delete/$1');
