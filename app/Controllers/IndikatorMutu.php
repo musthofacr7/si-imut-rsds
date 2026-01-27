@@ -4,6 +4,7 @@ namespace App\Controllers;
 
 use App\Models\IndikatorMutuModel;
 use App\Models\JenisIndikatorModel;
+use App\Models\MasterSatuanIndikatorModel;
 use Dompdf\Dompdf;
 use Dompdf\Options;
 
@@ -11,11 +12,13 @@ class IndikatorMutu extends BaseController
 {
     protected $indikatorMutuModel;
     protected $jenisIndikatorModel;
+    protected $satuanModel;
 
     public function __construct()
     {
         $this->indikatorMutuModel = new IndikatorMutuModel();
         $this->jenisIndikatorModel = new JenisIndikatorModel();
+        $this->satuanModel = new MasterSatuanIndikatorModel();
     }
 
     public function index()
@@ -32,6 +35,7 @@ class IndikatorMutu extends BaseController
     public function create()
     {
         $data['jenis_indikator'] = $this->jenisIndikatorModel->findAll();
+        $data['satuan'] = $this->satuanModel->findAll();
         return view('indikator_mutu/create', $data);
     }
 
@@ -79,6 +83,7 @@ class IndikatorMutu extends BaseController
         }
 
         $data['jenis_indikator'] = $this->jenisIndikatorModel->findAll();
+        $data['satuan'] = $this->satuanModel->findAll();
         return view('indikator_mutu/edit', $data);
     }
 

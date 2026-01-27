@@ -60,6 +60,16 @@ $routes->group('jenis-indikator', ['filter' => 'role:administrator'], function($
     $routes->get('delete/(:num)', 'JenisIndikator::delete/$1');
 });
 
+// Master Satuan Indikator Routes (Protected, Administrator only)
+$routes->group('master-satuan-indikator', ['filter' => 'role:administrator'], function($routes) {
+    $routes->get('/', 'MasterSatuanIndikator::index');
+    $routes->get('create', 'MasterSatuanIndikator::create');
+    $routes->post('store', 'MasterSatuanIndikator::store');
+    $routes->get('edit/(:num)', 'MasterSatuanIndikator::edit/$1');
+    $routes->post('update/(:num)', 'MasterSatuanIndikator::update/$1');
+    $routes->delete('delete/(:num)', 'MasterSatuanIndikator::delete/$1');
+});
+
 // Indikator Mutu Routes (Protected, Administrator only)
 $routes->group('indikator-mutu', ['filter' => 'role:administrator'], function($routes) {
     $routes->get('/', 'IndikatorMutu::index');

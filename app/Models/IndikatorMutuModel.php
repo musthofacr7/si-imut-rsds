@@ -50,7 +50,7 @@ class IndikatorMutuModel extends Model
         'numerator' => 'required',
         'denumerator' => 'required',
         'target_pencapaian' => 'required|max_length[255]',
-        'satuan_target_pencapaian' => 'required|in_list[%,menit]',
+        'satuan_target_pencapaian' => 'required|max_length[50]',
         'standar_target_pencapaian' => 'permit_empty|in_list[>,<,>=,<=]',
         'sumber_data' => 'required|max_length[255]',
         'status' => 'permit_empty|in_list[aktif,tidak aktif]',

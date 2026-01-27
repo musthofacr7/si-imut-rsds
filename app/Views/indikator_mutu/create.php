@@ -115,8 +115,12 @@ Tambah Indikator Mutu
                         </div>
                         <div class="col-sm-3">
                             <select class="form-select" id="satuan_target_pencapaian" name="satuan_target_pencapaian" required>
-                                <option value="%" <?= old('satuan_target_pencapaian') == '%' ? 'selected' : '' ?>>%</option>
-                                <option value="menit" <?= old('satuan_target_pencapaian') == 'menit' ? 'selected' : '' ?>>Menit</option>
+                                <option value="">Pilih Satuan</option>
+                                <?php foreach ($satuan as $s) : ?>
+                                    <option value="<?= esc($s['nama_satuan']) ?>" <?= old('satuan_target_pencapaian') == $s['nama_satuan'] ? 'selected' : '' ?>>
+                                        <?= esc($s['nama_satuan']) ?>
+                                    </option>
+                                <?php endforeach; ?>
                             </select>
                         </div>
                     </div>

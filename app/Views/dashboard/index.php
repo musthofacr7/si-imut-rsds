@@ -8,20 +8,7 @@ Dashboard
 
 <?php if (in_groups('administrator') && !empty($adminStats)): ?>
 <div class="row mb-4">
-    <!-- Area Pengukuran Check -->
-    <div class="col-md-3">
-        <div class="card bg-primary text-white mb-3">
-            <div class="card-body">
-                <div class="d-flex justify-content-between align-items-center">
-                    <div>
-                        <h6 class="card-title mb-0">Total Area Pengukuran</h6>
-                        <h2 class="mt-2 mb-0"><?= $adminStats['total_areas'] ?></h2>
-                    </div>
-                    <i class="bi bi-geo-alt fs-1 opacity-50"></i>
-                </div>
-            </div>
-        </div>
-    </div>
+    
 
     <!-- Indicators per Type -->
     <?php 
@@ -45,6 +32,20 @@ Dashboard
         </div>
     </div>
     <?php endforeach; ?>
+    <!-- Area Pengukuran Check -->
+    <div class="col-md-3">
+        <div class="card bg-primary text-white mb-3">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h6 class="card-title mb-0">Total Area Pengukuran</h6>
+                        <h2 class="mt-2 mb-0"><?= $adminStats['total_areas'] ?></h2>
+                    </div>
+                    <i class="bi bi-geo-alt fs-1 opacity-50"></i>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 <?php endif; ?>
 

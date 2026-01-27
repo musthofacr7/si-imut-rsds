@@ -36,6 +36,12 @@
                             </a>
                         </li>
                         <li class="nav-item">
+                            <a href="<?= base_url('master-satuan-indikator') ?>" class="nav-link">
+                                <i class="nav-icon bi bi-circle"></i>
+                                <p>Master Satuan</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
                             <a href="<?= base_url('indikator-mutu') ?>" class="nav-link">
                                 <i class="nav-icon bi bi-circle"></i>
                                 <p>Indikator Mutu</p>
