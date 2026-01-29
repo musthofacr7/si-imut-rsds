@@ -63,6 +63,7 @@ Rekap by Jenis Indikator
                             <tr>
                                 <th rowspan="2" style="min-width: 250px;">Nama Indikator</th>
                                 <th rowspan="2" style="min-width: 80px;">Target</th>
+                                <th rowspan="2" style="min-width: 80px;">Data</th>
                                 <th colspan="12">Capaian Bulan</th>
                             </tr>
                             <tr>
@@ -132,19 +133,47 @@ function loadData(jenisId, year) {
                     tbody = '<tr><td colspan="14" class="text-center">Tidak ada data indikator untuk jenis ini</td></tr>';
                 } else {
                     response.data.forEach(function(row) {
+                        const months = ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12'];
+                        
+                        // Row 1: Numerator
                         tbody += '<tr>';
-                        // Indicator Name and Target
-                        tbody += `<td>${row.judul}</td>`;
+                        tbody += `<td rowspan="3" class="align-middle bg-white">${row.judul}</td>`;
                         
                         let targetDisplay = row.standar + ' ' + row.target;
                         if (row.satuan === '%') targetDisplay += '%';
                         else targetDisplay += ' ' + row.satuan;
                         
-                        tbody += `<td class="text-center fw-bold">${targetDisplay}</td>`;
+                        tbody += `<td rowspan="3" class="text-center fw-bold align-middle bg-white">${targetDisplay}</td>`;
                         
-                        // Monthly Data
-                        const months = ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12'];
+                        tbody += '<td class="fw-bold">Numerator</td>';
                         
+                        months.forEach(function(m) {
+                            let val = (row.monthly_data[m] && row.monthly_data[m].denumerator > 0) ? row.monthly_data[m].numerator : '-';
+                             // If no data exists at all for the month (denumerator is 0 or null), show '-'
+                             // Check if we have data for this month
+                             if (row.monthly_data[m] && row.monthly_data[m].denumerator > 0) {
+                                 tbody += `<td class="text-center">${row.monthly_data[m].numerator}</td>`;
+                             } else {
+                                 tbody += `<td class="text-center text-muted">-</td>`;
+                             }
+                        });
+                        tbody += '</tr>';
+
+                        // Row 2: Denumerator
+                        tbody += '<tr>';
+                        tbody += '<td class="fw-bold">Denumerator</td>';
+                        months.forEach(function(m) {
+                             if (row.monthly_data[m] && row.monthly_data[m].denumerator > 0) {
+                                 tbody += `<td class="text-center">${row.monthly_data[m].denumerator}</td>`;
+                             } else {
+                                 tbody += `<td class="text-center text-muted">-</td>`;
+                             }
+                        });
+                        tbody += '</tr>';
+
+                        // Row 3: Capaian
+                        tbody += '<tr>';
+                        tbody += '<td class="fw-bold text-primary">Capaian</td>';
                         months.forEach(function(m) {
                             if (row.monthly_data[m] && row.monthly_data[m].denumerator > 0) {
                                 let achievement = row.monthly_data[m].achievement;
@@ -157,7 +186,6 @@ function loadData(jenisId, year) {
                                 tbody += `<td class="text-center text-muted">-</td>`;
                             }
                         });
-                        
                         tbody += '</tr>';
                     });
                 }
