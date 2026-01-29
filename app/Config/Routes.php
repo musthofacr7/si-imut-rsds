@@ -138,6 +138,18 @@ $routes->group('rekap-indikator-mutu', ['filter' => 'role:administrator'], funct
     $routes->post('get-chart-data', 'RekapIndikatorMutu::getChartData');
 });
 
+// Rekap by Jenis Indikator Routes (Protected, Administrator only)
+$routes->group('rekap-jenis-indikator', ['filter' => 'role:administrator'], function($routes) {
+    $routes->get('/', 'RekapJenisIndikator::index');
+    $routes->post('get-data', 'RekapJenisIndikator::getData');
+});
+
+// Rekap by Area Pengukuran Routes (Protected, Administrator only)
+$routes->group('rekap-area-pengukuran', ['filter' => 'role:administrator'], function($routes) {
+    $routes->get('/', 'RekapAreaPengukuran::index');
+    $routes->post('get-data', 'RekapAreaPengukuran::getData');
+});
+
 // PDSA Routes (Protected, Administrator & PJ Mutu)
 $routes->group('pdsa', ['filter' => 'login'], function($routes) {
     $routes->get('/', 'PDSA::index');

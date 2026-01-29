@@ -68,10 +68,33 @@
                     </ul>
                 </li>
                 <li class="nav-item">
-                    <a href="<?= base_url('rekap-indikator-mutu') ?>" class="nav-link">
-                        <i class="nav-icon bi bi-file-earmark-text"></i>
-                        <p>Rekap Indikator Mutu</p>
+                    <a href="#" class="nav-link">
+                        <i class="nav-icon bi bi-database"></i>
+                        <p>
+                            Rekap Indikator Mutu
+                            <i class="nav-arrow bi bi-chevron-right"></i>
+                        </p>
                     </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="<?= base_url('rekap-indikator-mutu') ?>" class="nav-link">
+                                <i class="nav-icon bi bi-file-earmark-text"></i>
+                                <p>Rekap Indikator Mutu</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="<?= base_url('rekap-jenis-indikator') ?>" class="nav-link">
+                                <i class="nav-icon bi bi-list-task"></i>
+                                <p>Rekap by Jenis</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="<?= base_url('rekap-area-pengukuran') ?>" class="nav-link">
+                                <i class="nav-icon bi bi-geo-alt"></i>
+                                <p>Rekap by Area</p>
+                            </a>
+                        </li>
+                    </ul>
                 </li>
 
                 <?php endif; ?>
