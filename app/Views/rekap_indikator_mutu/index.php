@@ -310,8 +310,31 @@ function loadChartData(indikatorId, areaId, year) {
                 // Update Chart Options based on Unit
                 const satuan = response.satuan || '%';
                 
+                // Calculate dynamic Y-axis max based on target and max achievement
+                const maxAchievement = Math.max(...response.data.filter(v => v !== null && v !== undefined), 0);
+                const targetValue = response.target || 0;
+                
+                let dynamicMax;
+                if (satuan === '%') {
+                    // Batas atas berdasarkan range target
+                    let minMax;
+                    if (targetValue < 2) {
+                        minMax = 2; // Standar < 2%, maksimal grafik 2%
+                    } else if (targetValue < 5) {
+                        minMax = 5; // Standar < 5%, maksimal grafik 5%
+                    } else {
+                        minMax = targetValue * 1.2; // Standar >= 5%, gunakan 1.2 × target
+                    }
+                    dynamicMax = Math.max(minMax, maxAchievement * 1.1);
+                    dynamicMax = Math.ceil(dynamicMax / (targetValue < 2 ? 0.5 : 5)) * (targetValue < 2 ? 0.5 : 5); // Bulatkan
+                } else {
+                    // Untuk satuan non-persen
+                    dynamicMax = Math.max(targetValue * 1.2, maxAchievement * 1.1);
+                    dynamicMax = Math.ceil(dynamicMax);
+                }
+                
                 // Update Y-axis
-                achievementChart.options.scales.y.max = satuan === '%' ? 115 : undefined;
+                achievementChart.options.scales.y.max = dynamicMax;
                 achievementChart.options.scales.y.ticks.callback = function(value) {
                     return satuan === '%' ? value + '%' : value;
                 };
