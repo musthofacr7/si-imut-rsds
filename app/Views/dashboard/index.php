@@ -405,9 +405,11 @@ chartData.forEach((data, index) => {
                             label: function(context) {
                                 let label = 'Capaian: ' + context.parsed.y;
                                 if (data.satuan === '%') {
-                                    label += '%';
+                                    label = 'Capaian: ' + context.parsed.y.toFixed(2) + '%';
+                                } else if (data.satuan === '‰' || data.satuan === 'Permil (‰)') {
+                                    label = 'Capaian: ' + context.parsed.y.toFixed(2) + '‰';
                                 } else {
-                                    label += ' ' + data.satuan;
+                                    label = 'Capaian: ' + context.parsed.y + ' ' + data.satuan;
                                 }
                                 return label;
                             }
@@ -421,6 +423,8 @@ chartData.forEach((data, index) => {
                             if (context.datasetIndex === 0) {
                                 if (data.satuan === '%') {
                                     return value.toFixed(2) + '%';
+                                } else if (data.satuan === '‰' || data.satuan === 'Permil (‰)') {
+                                    return value.toFixed(2) + '‰';
                                 } else {
                                     return value + ' ' + data.satuan;
                                 }

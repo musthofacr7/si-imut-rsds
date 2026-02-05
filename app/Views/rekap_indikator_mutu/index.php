@@ -345,6 +345,8 @@ function loadChartData(indikatorId, areaId, year) {
                     let label = 'Pencapaian: ' + context.parsed.y;
                     if (satuan === '%') {
                         label = 'Pencapaian: ' + context.parsed.y.toFixed(2) + '%';
+                    } else if (satuan === '‰' || satuan === 'Permil (‰)') {
+                        label = 'Pencapaian: ' + context.parsed.y.toFixed(2) + '‰';
                     } else {
                         label = 'Pencapaian: ' + context.parsed.y + ' ' + satuan;
                     }
@@ -356,6 +358,8 @@ function loadChartData(indikatorId, areaId, year) {
                     if (context.datasetIndex === 0) {
                         if (satuan === '%') {
                             return value.toFixed(2) + '%';
+                        } else if (satuan === '‰' || satuan === 'Permil (‰)') {
+                            return value.toFixed(2) + '‰';
                         } else {
                             return value + ' ' + satuan;
                         }
@@ -414,6 +418,10 @@ function loadChartData(indikatorId, areaId, year) {
                                 else badgeClass = 'bg-danger';
                                 
                                 displayValue += '%';
+                            } else if (satuan === '‰' || satuan === 'Permil (‰)') {
+                                // Logic for Permil - show 2 decimal places
+                                badgeClass = 'bg-info text-dark';
+                                displayValue = parseFloat(data.achievement).toFixed(2) + '‰';
                             } else {
                                 // Logic for Non-Percentage (use neutral or check against target if needed)
                                 // For now, just use a neutral color or info

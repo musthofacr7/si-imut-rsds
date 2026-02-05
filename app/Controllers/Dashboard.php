@@ -84,6 +84,10 @@ class Dashboard extends BaseController
                         if ($satuan == '%') {
                             $achievement = ($totalNum / $totalDen * 100);
                             $achievement = round($achievement, 2);
+                        } elseif ($satuan == '‰' || $satuan == 'Permil (‰)') {
+                            // Permil calculation: numerator / denumerator * 1000 with 2 decimal places
+                            $achievement = ($totalNum / $totalDen * 1000);
+                            $achievement = round($achievement, 2);
                         } else {
                             $achievement = ($totalNum / $totalDen);
                             $achievement = round($achievement, 0); // 0 decimals for non-percentage

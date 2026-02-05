@@ -133,16 +133,27 @@ Input Indikator Mutu RS
                                         endfor;
                                         
                                         $capaian = 0;
+                                        $satuan = $indikator['satuan_target_pencapaian'];
                                         if ($tempTotalDenumerator > 0) {
-                                            if ($indikator['satuan_target_pencapaian'] == '%') {
+                                            if ($satuan == '%') {
                                                 $capaian = ($totalNumerator / $tempTotalDenumerator * 100);
                                                 $displayCapaian = number_format($capaian, 2) . '%';
+                                            } elseif ($satuan == '‰' || $satuan == 'Permil (‰)') {
+                                                // Permil calculation: numerator / denumerator * 1000 with 2 decimal places
+                                                $capaian = ($totalNumerator / $tempTotalDenumerator * 1000);
+                                                $displayCapaian = number_format($capaian, 2) . '‰';
                                             } else {
                                                 $capaian = ($totalNumerator / $tempTotalDenumerator);
-                                                $displayCapaian = number_format($capaian, 0) . ' ' . $indikator['satuan_target_pencapaian'];
+                                                $displayCapaian = number_format($capaian, 0) . ' ' . $satuan;
                                             }
                                         } else {
-                                            $displayCapaian = $indikator['satuan_target_pencapaian'] == '%' ? '0.00%' : '0 ' . $indikator['satuan_target_pencapaian'];
+                                            if ($satuan == '%') {
+                                                $displayCapaian = '0.00%';
+                                            } elseif ($satuan == '‰' || $satuan == 'Permil (‰)') {
+                                                $displayCapaian = '0.00‰';
+                                            } else {
+                                                $displayCapaian = '0 ' . $satuan;
+                                            }
                                         }
                                         ?>
                                         <td rowspan="2" class="text-center fw-bold bg-light align-middle capaian-cell"
@@ -577,12 +588,22 @@ $(document).ready(function() {
             if (satuan === '%') {
                 capaian = (totalNum / totalDen) * 100;
                 displayCapaian = capaian.toFixed(2) + '%';
+            } else if (satuan === '‰' || satuan === 'Permil (‰)') {
+                // Permil calculation: numerator / denumerator * 1000 with 2 decimal places
+                capaian = (totalNum / totalDen) * 1000;
+                displayCapaian = capaian.toFixed(2) + '‰';
             } else {
                 capaian = (totalNum / totalDen);
                 displayCapaian = capaian.toFixed(0) + ' ' + satuan;
             }
         } else {
-            displayCapaian = satuan === '%' ? '0.00%' : '0 ' + satuan;
+            if (satuan === '%') {
+                displayCapaian = '0.00%';
+            } else if (satuan === '‰' || satuan === 'Permil (‰)') {
+                displayCapaian = '0.00‰';
+            } else {
+                displayCapaian = '0 ' + satuan;
+            }
         }
         
         cell.text(displayCapaian);

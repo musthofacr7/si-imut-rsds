@@ -127,6 +127,10 @@ class InputIndikatorRsModel extends Model
                 if ($satuan == '%') {
                     $achievement = ($row['total_numerator'] / $row['total_denumerator']) * 100;
                     $months[$monthNum]['achievement'] = round($achievement, 2);
+                } elseif ($satuan == '‰' || $satuan == 'Permil (‰)') {
+                    // Permil calculation: numerator / denumerator * 1000 with 2 decimal places
+                    $achievement = ($row['total_numerator'] / $row['total_denumerator']) * 1000;
+                    $months[$monthNum]['achievement'] = round($achievement, 2);
                 } else {
                     $achievement = ($row['total_numerator'] / $row['total_denumerator']);
                     $months[$monthNum]['achievement'] = round($achievement, 0);
@@ -189,6 +193,10 @@ class InputIndikatorRsModel extends Model
             if ($row['total_denumerator'] > 0) {
                 if ($satuan == '%') {
                     $achievement = ($row['total_numerator'] / $row['total_denumerator']) * 100;
+                    $structuredData[$areaName][$monthNum]['achievement'] = round($achievement, 2);
+                } elseif ($satuan == '‰' || $satuan == 'Permil (‰)') {
+                    // Permil calculation: numerator / denumerator * 1000 with 2 decimal places
+                    $achievement = ($row['total_numerator'] / $row['total_denumerator']) * 1000;
                     $structuredData[$areaName][$monthNum]['achievement'] = round($achievement, 2);
                 } else {
                     $achievement = ($row['total_numerator'] / $row['total_denumerator']);
