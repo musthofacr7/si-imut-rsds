@@ -113,7 +113,12 @@ Input Indikator Mutu RS
                                                 data-type="numerator"
                                                 data-current-value="<?= $value ?>">
                                                 <div class="cell-content d-flex justify-content-center align-items-center">
-                                                    <?= $value !== '' ? $value : '' ?>
+                                                    <?php 
+                                                    if ($value !== '') {
+                                                        $floatVal = (float)$value;
+                                                        echo floor($floatVal) == $floatVal ? (int)$floatVal : number_format($floatVal, 2, '.', '');
+                                                    }
+                                                    ?>
                                                 </div>
                                             </td>
                                         <?php endfor; ?>
@@ -121,7 +126,7 @@ Input Indikator Mutu RS
                                             data-indikator-id="<?= $indikator['indikator_mutu_id'] ?>" 
                                             data-area-id="<?= $indikator['area_pengukuran_id'] ?>"
                                             style="position: sticky; right: 0; z-index: 5;">
-                                            <?= $totalNumerator ?>
+                                            <?= floor($totalNumerator) == $totalNumerator ? (int)$totalNumerator : number_format($totalNumerator, 2, '.', '') ?>
                                         </td>
                                         <?php
                                         // Calculate initial totals for denumerator to calculate capaian
@@ -188,7 +193,12 @@ Input Indikator Mutu RS
                                                 data-type="denumerator"
                                                 data-current-value="<?= $value ?>">
                                                 <div class="cell-content d-flex justify-content-center align-items-center">
-                                                    <?= $value !== '' ? $value : '' ?>
+                                                    <?php 
+                                                    if ($value !== '') {
+                                                        $floatVal = (float)$value;
+                                                        echo floor($floatVal) == $floatVal ? (int)$floatVal : number_format($floatVal, 2, '.', '');
+                                                    }
+                                                    ?>
                                                 </div>
                                             </td>
                                         <?php endfor; ?>
@@ -196,7 +206,7 @@ Input Indikator Mutu RS
                                             data-indikator-id="<?= $indikator['indikator_mutu_id'] ?>" 
                                             data-area-id="<?= $indikator['area_pengukuran_id'] ?>"
                                             style="position: sticky; right: 0; z-index: 5;">
-                                            <?= $totalDenumerator ?>
+                                            <?= floor($totalDenumerator) == $totalDenumerator ? (int)$totalDenumerator : number_format($totalDenumerator, 2, '.', '') ?>
                                         </td>
                                     </tr>
                                 <?php endforeach; ?>
@@ -526,13 +536,20 @@ $(document).ready(function() {
                     }),
                     success: function(response) {
                         if (response.success) {
+                            // Helper function to format decimal values
+                            function formatDecimal(val) {
+                                if (val === '' || val === null || val === undefined) return '0';
+                                const num = parseFloat(val);
+                                return Number.isInteger(num) ? num : num.toFixed(2);
+                            }
+                            
                             // Update Numerator Cell
                             numCell.data('current-value', numerator);
-                            numCell.find('.cell-content').text(numerator !== '' ? numerator : '0');
+                            numCell.find('.cell-content').text(formatDecimal(numerator));
                             
                             // Update Denumerator Cell
                             denCell.data('current-value', denumerator);
-                            denCell.find('.cell-content').text(denumerator !== '' ? denumerator : '0');
+                            denCell.find('.cell-content').text(formatDecimal(denumerator));
                             
                             // Recalculate Totals
                             updateRowTotal(indikatorId, areaId, 'numerator');
