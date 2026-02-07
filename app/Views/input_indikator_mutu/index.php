@@ -480,7 +480,7 @@ $(document).ready(function() {
                                        ${descriptions.numerator}
                                 </div>
                                 <div class="col-sm-3">
-                                    <input type="number" id="swal-input-num" class="form-control form-control-sm" value="${currentNum !== undefined ? currentNum : ''}" min="0">
+                                    <input type="number" id="swal-input-num" class="form-control form-control-sm" value="${currentNum !== undefined ? currentNum : ''}" min="0" step="any">
                                 </div>
                             </div>
                         </div>
@@ -491,7 +491,7 @@ $(document).ready(function() {
                                        ${descriptions.denumerator}
                                 </div>
                                 <div class="col-sm-3">
-                                    <input type="number" id="swal-input-den" class="form-control form-control-sm" value="${currentDen !== undefined ? currentDen : ''}" min="0">
+                                    <input type="number" id="swal-input-den" class="form-control form-control-sm" value="${currentDen !== undefined ? currentDen : ''}" min="0" step="any">
                                 </div>
                             </div>
                         </div>
@@ -568,7 +568,9 @@ $(document).ready(function() {
             }
         });
         
-        $(`.total-cell-${type}[data-indikator-id="${indikatorId}"][data-area-id="${areaId}"]`).text(total);
+        // Format total: show 2 decimal places if has decimal, otherwise show whole number
+        const displayTotal = Number.isInteger(total) ? total : parseFloat(total.toFixed(2));
+        $(`.total-cell-${type}[data-indikator-id="${indikatorId}"][data-area-id="${areaId}"]`).text(displayTotal);
     }
 
     function updateCapaian(indikatorId, areaId) {

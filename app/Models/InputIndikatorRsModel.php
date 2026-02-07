@@ -120,8 +120,11 @@ class InputIndikatorRsModel extends Model
         foreach ($data as $row) {
             $monthNum = substr($row['month'], 5, 2); // Extract month from YYYY-MM
             
-            $months[$monthNum]['numerator'] = (int)$row['total_numerator'];
-            $months[$monthNum]['denumerator'] = (int)$row['total_denumerator'];
+            // Use float and format to 2 decimal places if has decimal, otherwise show whole number
+            $numVal = (float)$row['total_numerator'];
+            $denVal = (float)$row['total_denumerator'];
+            $months[$monthNum]['numerator'] = floor($numVal) == $numVal ? (int)$numVal : round($numVal, 2);
+            $months[$monthNum]['denumerator'] = floor($denVal) == $denVal ? (int)$denVal : round($denVal, 2);
             
             if ($row['total_denumerator'] > 0) {
                 if ($satuan == '%') {
@@ -187,8 +190,11 @@ class InputIndikatorRsModel extends Model
                 }
             }
             
-            $structuredData[$areaName][$monthNum]['numerator'] = (int)$row['total_numerator'];
-            $structuredData[$areaName][$monthNum]['denumerator'] = (int)$row['total_denumerator'];
+            // Use float and format to 2 decimal places if has decimal, otherwise show whole number
+            $numVal = (float)$row['total_numerator'];
+            $denVal = (float)$row['total_denumerator'];
+            $structuredData[$areaName][$monthNum]['numerator'] = floor($numVal) == $numVal ? (int)$numVal : round($numVal, 2);
+            $structuredData[$areaName][$monthNum]['denumerator'] = floor($denVal) == $denVal ? (int)$denVal : round($denVal, 2);
             
             if ($row['total_denumerator'] > 0) {
                 if ($satuan == '%') {
