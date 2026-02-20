@@ -138,6 +138,11 @@ $routes->group('rekap-indikator-mutu', ['filter' => 'role:administrator'], funct
     $routes->post('get-chart-data', 'RekapIndikatorMutu::getChartData');
 });
 
+// Monitoring Input Routes (Protected, Administrator only)
+$routes->group('monitoring-input', ['filter' => 'role:administrator'], function($routes) {
+    $routes->get('/', 'MonitoringInput::index');
+});
+
 // Rekap by Jenis Indikator Routes (Protected, Administrator only)
 $routes->group('rekap-jenis-indikator', ['filter' => 'role:administrator'], function($routes) {
     $routes->get('/', 'RekapJenisIndikator::index');

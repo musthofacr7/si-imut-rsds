@@ -94,7 +94,14 @@
                                 <p>Rekap by Area</p>
                             </a>
                         </li>
+                        
                     </ul>
+                    <li class="nav-item">
+                            <a href="<?= base_url('monitoring-input') ?>" class="nav-link">
+                                <i class="nav-icon bi bi-eye"></i>
+                                <p>Monitoring Input</p>
+                            </a>
+                        </li>
                 </li>
 
                 <?php endif; ?>
