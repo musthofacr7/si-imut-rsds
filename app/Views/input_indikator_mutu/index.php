@@ -422,7 +422,7 @@ $(document).ready(function() {
                     $('#detail_rencana_analisis').html(data.rencana_analisis || '-');
                     
                     // Text content
-                    $('#detail_target_pencapaian').text(data.target_pencapaian + ' ' + (data.satuan_target_pencapaian || '%'));
+                    $('#detail_target_pencapaian').text((data.standar_target_pencapaian ? data.standar_target_pencapaian + ' ' : '') + data.target_pencapaian + ' ' + (data.satuan_target_pencapaian || '%'));
                     $('#detail_sumber_data').text(data.sumber_data);
                     $('#detail_frekuensi_pengumpulan_data').text(data.frekuensi_pengumpulan_data || '-');
                     $('#detail_periode_analisis_data').text(data.periode_analisis_data || '-');
