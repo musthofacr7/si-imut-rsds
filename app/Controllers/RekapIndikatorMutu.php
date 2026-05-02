@@ -86,6 +86,8 @@ class RekapIndikatorMutu extends BaseController
             'area' => $areaName,
             'year' => $year,
             'target' => floatval(str_replace(['%', ','], ['', '.'], $indikator['target_pencapaian'] ?? 0)),
+            'target_raw' => $indikator['target_pencapaian'] ?? '0',
+            'standar' => $indikator['standar_target_pencapaian'] ?? '',
             'satuan' => $indikator['satuan_target_pencapaian'] ?? '%'
         ]);
     }

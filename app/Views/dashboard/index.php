@@ -126,6 +126,26 @@ Dashboard
                 </div>
             </div>
             <div class="card-body">
+                <!-- Toolbar Trend -->
+                <div class="d-flex flex-wrap gap-2 mb-3">
+                    <div>
+                        <span class="me-1 fw-semibold small text-muted">Tampilan Trend:</span>
+                        <div class="btn-group btn-group-sm" role="group">
+                            <input type="radio" class="btn-check" name="dashTrendType" id="dashTrendOff" value="off" checked>
+                            <label class="btn btn-outline-secondary" for="dashTrendOff">
+                                <i class="bi bi-x-circle"></i> Trend Off
+                            </label>
+                            <input type="radio" class="btn-check" name="dashTrendType" id="dashTrend3" value="3">
+                            <label class="btn btn-outline-success" for="dashTrend3">
+                                <i class="bi bi-graph-up-arrow"></i> 3 Bulanan
+                            </label>
+                            <input type="radio" class="btn-check" name="dashTrendType" id="dashTrend6" value="6">
+                            <label class="btn btn-outline-success" for="dashTrend6">
+                                <i class="bi bi-graph-up-arrow"></i> 6 Bulanan
+                            </label>
+                        </div>
+                    </div>
+                </div>
                 <?php foreach ($chartData as $index => $chart): ?>
                 <div class="mb-4">
                     <h5><?= esc($chart['label']) ?></h5>
@@ -154,9 +174,9 @@ Dashboard
 
 <?= $this->section('scripts') ?>
 <!-- Chart.js -->
-<!-- Chart.js -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0/dist/chartjs-plugin-datalabels.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@3.0.1/dist/chartjs-plugin-annotation.min.js"></script>
 <!-- jsPDF for PDF export -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <!-- html2canvas for PNG export -->
@@ -180,6 +200,82 @@ document.querySelectorAll('input[name="dashboardChartType"]').forEach(input => {
         });
     });
 });
+
+// Handle Trend Type Toggle
+document.querySelectorAll('input[name="dashTrendType"]').forEach(input => {
+    input.addEventListener('change', function() {
+        updateAllTrendAnnotations();
+    });
+});
+
+function updateAllTrendAnnotations() {
+    const trendType = document.querySelector('input[name="dashTrendType"]:checked')?.value || 'off';
+
+    function firstVal(data, start, end) {
+        for (let i = start; i <= end; i++) {
+            if (data[i] !== null && data[i] !== undefined) return { idx: i, val: parseFloat(data[i]) };
+        }
+        return null;
+    }
+    function lastVal(data, start, end) {
+        for (let i = end; i >= start; i--) {
+            if (data[i] !== null && data[i] !== undefined) return { idx: i, val: parseFloat(data[i]) };
+        }
+        return null;
+    }
+    function makeBoundary(annotations, x, key) {
+        annotations[key + '_bg'] = {
+            type: 'line', xMin: x, xMax: x,
+            borderColor: 'rgba(0,0,0,0.4)', borderWidth: 3,
+            drawTime: 'beforeDatasetsDraw'
+        };
+        annotations[key] = {
+            type: 'line', xMin: x, xMax: x,
+            borderColor: 'rgba(255,255,255,0.95)', borderWidth: 2,
+            borderDash: [6, 4], drawTime: 'afterDatasetsDraw'
+        };
+    }
+    function makeArrow(annotations, data, startIdx, endIdx, key) {
+        const p1 = firstVal(data, startIdx, endIdx);
+        const p2 = lastVal(data, startIdx, endIdx);
+        if (!p1 || !p2 || p1.idx === p2.idx) return;
+        const y1 = p1.val, y2 = p2.val;
+        let color;
+        if (y2 > y1)      color = 'rgba(25,135,84,0.80)';
+        else if (y2 < y1) color = 'rgba(220,53,69,0.80)';
+        else              color = 'rgba(108,117,125,0.65)';
+        annotations[key] = {
+            type: 'line',
+            xMin: p1.idx, yMin: y1,
+            xMax: p2.idx, yMax: y2,
+            borderColor: color, borderWidth: 1.5,
+            arrowHeads: { end: { display: true, fill: true, length: 5, width: 5 } },
+            drawTime: 'afterDatasetsDraw'
+        };
+    }
+
+    chartInstances.forEach((chart, index) => {
+        const data = chart.data.datasets[0].data;
+        let annotations = {};
+
+        if (trendType === '3') {
+            makeBoundary(annotations, 2.5, 'lineV0');
+            makeBoundary(annotations, 5.5, 'lineV1');
+            makeBoundary(annotations, 8.5, 'lineV2');
+            makeArrow(annotations, data, 0, 2,  'arrow_p1');
+            makeArrow(annotations, data, 3, 5,  'arrow_p2');
+            makeArrow(annotations, data, 6, 8,  'arrow_p3');
+            makeArrow(annotations, data, 9, 11, 'arrow_p4');
+        } else if (trendType === '6') {
+            makeBoundary(annotations, 5.5, 'lineV0');
+            makeArrow(annotations, data, 0, 5,  'arrow_p1');
+            makeArrow(annotations, data, 6, 11, 'arrow_p2');
+        }
+
+        chart.options.plugins.annotation.annotations = annotations;
+        chart.update();
+    });
+}
 
 // Color palette for charts
 const colors = [
@@ -340,6 +436,9 @@ chartData.forEach((data, index) => {
     if (ctx) {
         // Register the plugin
         Chart.register(ChartDataLabels);
+        if (typeof window['chartjs-plugin-annotation'] !== 'undefined') {
+            Chart.register(window['chartjs-plugin-annotation']);
+        }
 
         // Create array of target values (same value for all months)
         const targetData = Array(12).fill(data.target);
@@ -409,6 +508,9 @@ chartData.forEach((data, index) => {
                     }
                 },
                 plugins: {
+                    annotation: {
+                        annotations: {}
+                    },
                     legend: {
                         display: false
                     },

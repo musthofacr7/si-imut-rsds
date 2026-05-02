@@ -65,22 +65,49 @@ Rekap Indikator Mutu RS
             <div class="col-md-12">
                 <div class="card">
                     <div class="card-header">
-                        <div class="d-flex justify-content-between align-items-center mb-0">
+                        <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
                             <h5 class="card-title mb-0" id="chartTitle">Grafik Pencapaian Indikator Mutu</h5>
-                            <div class="btn-group btn-group-sm" role="group" aria-label="Chart Type">
-                                <input type="radio" class="btn-check" name="chartType" id="typeBar" value="bar" checked>
-                                <label class="btn btn-outline-primary" for="typeBar">
-                                    <i class="bi bi-bar-chart-fill"></i> Bar
-                                </label>
-
-                                <input type="radio" class="btn-check" name="chartType" id="typeLine" value="line">
-                                <label class="btn btn-outline-primary" for="typeLine">
-                                    <i class="bi bi-graph-up"></i> Line
-                                </label>
+                            <div id="standarCapaianInfo" class="d-none text-end">
+                                <span class="text-muted small me-1">Standar Capaian:</span>
+                                <span id="standarBadge" class="fw-semibold"></span>
                             </div>
                         </div>
                     </div>
                     <div class="card-body">
+                        <!-- Toolbar Tombol -->
+                        <div class="d-flex flex-wrap gap-2 mb-3">
+                            <div>
+                                <span class="me-1 fw-semibold small text-muted">Tampilan Trend:</span>
+                                <div class="btn-group btn-group-sm" role="group">
+                                    <input type="radio" class="btn-check" name="trendType" id="trendOff" value="off" checked>
+                                    <label class="btn btn-outline-secondary" for="trendOff">
+                                        <i class="bi bi-x-circle"></i> Trend Off
+                                    </label>
+                                    <input type="radio" class="btn-check" name="trendType" id="trend3" value="3">
+                                    <label class="btn btn-outline-success" for="trend3">
+                                        <i class="bi bi-graph-up-arrow"></i> 3 Bulanan
+                                    </label>
+                                    <input type="radio" class="btn-check" name="trendType" id="trend6" value="6">
+                                    <label class="btn btn-outline-success" for="trend6">
+                                        <i class="bi bi-graph-up-arrow"></i> 6 Bulanan
+                                    </label>
+                                </div>
+                            </div>
+                            <div>
+                                <span class="me-1 fw-semibold small text-muted">Tipe Grafik:</span>
+                                <div class="btn-group btn-group-sm" role="group">
+                                    <input type="radio" class="btn-check" name="chartType" id="typeBar" value="bar" checked>
+                                    <label class="btn btn-outline-primary" for="typeBar">
+                                        <i class="bi bi-bar-chart-fill"></i> Bar
+                                    </label>
+                                    <input type="radio" class="btn-check" name="chartType" id="typeLine" value="line">
+                                    <label class="btn btn-outline-primary" for="typeLine">
+                                        <i class="bi bi-graph-up"></i> Line
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
                         <div id="chartLoading" class="text-center py-5" style="display: none;">
                             <div class="spinner-border text-primary" role="status">
                                 <span class="visually-hidden">Loading...</span>
@@ -98,6 +125,7 @@ Rekap Indikator Mutu RS
             </div>
         </div>
 
+
         <!-- Data Table Section -->
         <div class="row mb-4">
             <div class="col-md-12">
@@ -111,6 +139,7 @@ Rekap Indikator Mutu RS
                                 <thead class="table-light text-center align-middle">
                                     <tr>
                                         <th rowspan="2" style="min-width: 150px; vertical-align: middle;">Area Pengukuran</th>
+                                        <th rowspan="2" style="min-width: 90px; vertical-align: middle;">Standar</th>
                                         <th rowspan="2" style="min-width: 100px; vertical-align: middle;">Data</th>
                                         <th colspan="12">Bulan</th>
                                     </tr>
@@ -124,7 +153,7 @@ Rekap Indikator Mutu RS
                                 </thead>
                                 <tbody>
                                     <tr>
-                                        <td colspan="14" class="text-center text-muted">Silakan pilih filter dan klik "Tampilkan Grafik" untuk melihat data.</td>
+                                        <td colspan="15" class="text-center text-muted">Silakan pilih filter dan klik "Tampilkan Grafik" untuk melihat data.</td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -141,9 +170,9 @@ Rekap Indikator Mutu RS
 
 <?= $this->section('scripts') ?>
 <!-- Chart.js -->
-<!-- Chart.js -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0/dist/chartjs-plugin-datalabels.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@3.0.1/dist/chartjs-plugin-annotation.min.js"></script>
 
 <script>
 let achievementChart = null;
@@ -177,19 +206,135 @@ $(document).ready(function() {
     $('input[name="chartType"]').change(function() {
         const type = $(this).val();
         if (achievementChart) {
-            // Destroy and re-init to ensure clean state or just update config
-            // Simple config update is usually enough for type switch if datasets are compatible
             achievementChart.config.type = type;
             achievementChart.update();
         }
     });
+
+    // Handle Trend Type Change
+    $('input[name="trendType"]').change(function() {
+        updateTrendAnnotations();
+    });
 });
+
+function updateTrendAnnotations() {
+    if (!achievementChart) return;
+    
+    const trendType = $('input[name="trendType"]:checked').val();
+    let annotations = {};
+    
+    if (trendType === 'off') {
+        achievementChart.options.plugins.annotation.annotations = annotations;
+        achievementChart.update();
+        return;
+    }
+
+    const data = achievementChart.data.datasets[0].data; // Monthly data (index 0-11)
+
+    // Helper: get first non-null value in range [start, end] (inclusive)
+    function firstVal(start, end) {
+        for (let i = start; i <= end; i++) {
+            if (data[i] !== null && data[i] !== undefined) return { idx: i, val: parseFloat(data[i]) };
+        }
+        return null;
+    }
+    // Helper: get last non-null value in range [start, end] (inclusive)
+    function lastVal(start, end) {
+        for (let i = end; i >= start; i--) {
+            if (data[i] !== null && data[i] !== undefined) return { idx: i, val: parseFloat(data[i]) };
+        }
+        return null;
+    }
+
+    // Boundary line style (jelas, solid putih dengan garis hitam tipis di belakang)
+    function makeBoundary(x, key) {
+        // Shadow hitam tipis agar terlihat di background apapun
+        annotations[key + '_bg'] = {
+            type: 'line',
+            xMin: x, xMax: x,
+            borderColor: 'rgba(0,0,0,0.4)',
+            borderWidth: 3,
+            drawTime: 'beforeDatasetsDraw'
+        };
+        // Garis putus-putus putih di atas
+        annotations[key] = {
+            type: 'line',
+            xMin: x, xMax: x,
+            borderColor: 'rgba(255,255,255,0.95)',
+            borderWidth: 2,
+            borderDash: [6, 4],
+            drawTime: 'afterDatasetsDraw'
+        };
+    }
+
+    // Arrow style: di dalam periode, dari nilai bulan pertama ke bulan terakhir
+    function makeArrow(startIdx, endIdx, key) {
+        const p1 = firstVal(startIdx, endIdx);
+        const p2 = lastVal(startIdx, endIdx);
+        if (!p1 || !p2 || p1.idx === p2.idx) return;
+
+        const y1 = p1.val;
+        const y2 = p2.val;
+        let color;
+        if (y2 > y1)       color = 'rgba(25,135,84,0.80)';    // hijau - naik
+        else if (y2 < y1)  color = 'rgba(220,53,69,0.80)';    // merah - turun
+        else               color = 'rgba(108,117,125,0.65)';  // abu - stabil
+
+        annotations[key] = {
+            type: 'line',
+            xMin: p1.idx,
+            yMin: y1,
+            xMax: p2.idx,
+            yMax: y2,
+            borderColor: color,
+            borderWidth: 1.5,
+            arrowHeads: {
+                end: {
+                    display: true,
+                    fill: true,
+                    length: 5,
+                    width: 5
+                }
+            },
+            drawTime: 'afterDatasetsDraw'
+        };
+    }
+
+    if (trendType === '3') {
+        // 4 Periode: Jan-Mar (0-2), Apr-Jun (3-5), Jul-Sep (6-8), Okt-Des (9-11)
+        // Batas: antara Mar/Apr (2.5), Jun/Jul (5.5), Sep/Okt (8.5)
+        makeBoundary(2.5, 'lineV0');
+        makeBoundary(5.5, 'lineV1');
+        makeBoundary(8.5, 'lineV2');
+
+        // Panah di dalam tiap periode
+        makeArrow(0, 2,  'arrow_p1');
+        makeArrow(3, 5,  'arrow_p2');
+        makeArrow(6, 8,  'arrow_p3');
+        makeArrow(9, 11, 'arrow_p4');
+
+    } else if (trendType === '6') {
+        // 2 Periode: Jan-Jun (0-5), Jul-Des (6-11)
+        // Batas: antara Jun/Jul (5.5)
+        makeBoundary(5.5, 'lineV0');
+
+        // Panah di dalam tiap periode
+        makeArrow(0, 5,  'arrow_p1');
+        makeArrow(6, 11, 'arrow_p2');
+    }
+
+    achievementChart.options.plugins.annotation.annotations = annotations;
+    achievementChart.update();
+}
 
 function initChart() {
     const ctx = document.getElementById('achievementChart').getContext('2d');
     
     // Register the plugin
     Chart.register(ChartDataLabels);
+    if (typeof window['chartjs-plugin-annotation'] !== 'undefined') {
+        Chart.register(window['chartjs-plugin-annotation']);
+    }
 
     achievementChart = new Chart(ctx, {
         type: 'bar',
@@ -239,6 +384,9 @@ function initChart() {
                 }
             },
             plugins: {
+                annotation: {
+                    annotations: {}
+                },
                 legend: {
                     display: true,
                     position: 'top'
@@ -296,7 +444,21 @@ function loadChartData(indikatorId, areaId, year) {
             if (response.success) {
                 // Update chart title
                 $('#chartTitle').text(`Grafik Pencapaian: ${response.title} - ${response.area} (${response.year})`);
-                
+
+                // Update standar capaian di card-header
+                const standar = response.standar || '';
+                const standarSymbols = { '>': '>', '<': '<', '>=': '≥', '<=': '≤' };
+                const targetRaw = response.target_raw || response.target;
+                const satuanLabel = response.satuan || '%';
+                const sym = standarSymbols[standar] || '';
+
+                const badgeText = sym
+                    ? `${sym} ${targetRaw} ${satuanLabel}`
+                    : `${targetRaw} ${satuanLabel}`;
+
+                $('#standarBadge').text(badgeText).removeClass().addClass('fw-semibold');
+                $('#standarCapaianInfo').removeClass('d-none');
+
                 // Update chart data
                 achievementChart.data.labels = response.labels;
                 achievementChart.data.datasets[0].data = response.data;
@@ -371,16 +533,40 @@ function loadChartData(indikatorId, areaId, year) {
 
                 achievementChart.update();
                 
+                // Update trend annotations if active
+                updateTrendAnnotations();
+                
                 $('#chartContainer').show();
 
                 // Update Data Table (Detailed Matrix Format)
                 let tableBody = '';
                 
+                const standarSym = response.standar || '';
+                const tgtVal = parseFloat(response.target) || 0;
+
+                // Helper: cek apakah capaian memenuhi standar
+                function meetStandar(achievement) {
+                    const val = parseFloat(achievement);
+                    if (isNaN(val)) return null;
+                    if (standarSym === '>=') return val >= tgtVal;
+                    if (standarSym === '<=') return val <= tgtVal;
+                    if (standarSym === '>')  return val >  tgtVal;
+                    if (standarSym === '<')  return val <  tgtVal;
+                    return null;
+                }
+
                 // Iterate through each area
                 for (const [areaName, months] of Object.entries(response.area_data)) {
-                    // Row 1: Numerator (with Area Name rowspan)
+                    const standarSymDisplay = { '>=': '≥', '<=': '≤', '>': '>', '<': '<' }[standarSym] || '';
+                    const satuanCompact = satuan === 'Permil (‰)' ? '‰' : satuan;
+                    const standarCellText = tgtVal
+                        ? `<span class="fw-semibold">${standarSymDisplay}${tgtVal}${satuanCompact}</span>`
+                        : `-`;
+
+                    // Row 1: Numerator (with Area Name rowspan=3, Standar rowspan=3)
                     tableBody += `<tr>`;
                     tableBody += `<td rowspan="3" class="fw-bold align-middle bg-light">${areaName}</td>`;
+                    tableBody += `<td rowspan="3" class="text-center align-middle">${standarCellText}</td>`;
                     tableBody += `<td class="fw-bold">Numerator</td>`;
                     
                     for (let i = 1; i <= 12; i++) {
@@ -438,7 +624,7 @@ function loadChartData(indikatorId, areaId, year) {
                 }
                 
                 if (Object.keys(response.area_data).length === 0) {
-                    tableBody = '<tr><td colspan="14" class="text-center">Tidak ada data untuk filter yang dipilih</td></tr>';
+                    tableBody = '<tr><td colspan="15" class="text-center">Tidak ada data untuk filter yang dipilih</td></tr>';
                 }
                 
                 $('#monthlyDataTable tbody').html(tableBody);
