@@ -113,9 +113,9 @@ class Dashboard extends BaseController
             
             // Count indicators per jenis_indikator
             $indicatorCounts = $db->table('indikator_mutu')
-                ->select('jenis_indikator.jenis_indikator as nama_jenis_indikator, COUNT(indikator_mutu.id) as total')
+                ->select('jenis_indikator.id as jenis_indikator_id, jenis_indikator.jenis_indikator as nama_jenis_indikator, COUNT(indikator_mutu.id) as total')
                 ->join('jenis_indikator', 'jenis_indikator.id = indikator_mutu.jenis_indikator_id')
-                ->groupBy('jenis_indikator.jenis_indikator')
+                ->groupBy('jenis_indikator.id, jenis_indikator.jenis_indikator')
                 ->get()
                 ->getResultArray();
                 

@@ -6,6 +6,16 @@ Dashboard
 
 <?= $this->section('content') ?>
 
+<style>
+.card-hover {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.card-hover:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 .5rem 1rem rgba(0,0,0,.15)!important;
+}
+</style>
+
 <?php if (in_groups('administrator') && !empty($adminStats)): ?>
 <div class="row mb-4">
     
@@ -19,17 +29,19 @@ Dashboard
         $textColorClass = $textColors[$index % count($textColors)];
     ?>
     <div class="col-md-3">
-        <div class="card <?= $colorClass ?> <?= $textColorClass ?> mb-3">
-            <div class="card-body">
-                <div class="d-flex justify-content-between align-items-center">
-                    <div>
-                        <h6 class="card-title mb-0"><?= esc($stat['nama_jenis_indikator']) ?></h6>
-                        <h2 class="mt-2 mb-0"><?= $stat['total'] ?></h2>
+        <a href="<?= base_url('indikator-mutu') ?>?jenis_indikator_id=<?= $stat['jenis_indikator_id'] ?>" class="text-decoration-none">
+            <div class="card <?= $colorClass ?> <?= $textColorClass ?> mb-3 card-hover">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="card-title mb-0"><?= esc($stat['nama_jenis_indikator']) ?></h6>
+                            <h2 class="mt-2 mb-0"><?= $stat['total'] ?></h2>
+                        </div>
+                        <i class="bi bi-list-check fs-1 opacity-50"></i>
                     </div>
-                    <i class="bi bi-list-check fs-1 opacity-50"></i>
                 </div>
             </div>
-        </div>
+        </a>
     </div>
     <?php endforeach; ?>
     <!-- Area Pengukuran Check -->
