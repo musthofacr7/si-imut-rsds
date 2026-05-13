@@ -95,6 +95,30 @@ $routes->group('area-pengukuran', ['filter' => 'role:administrator'], function($
 });
 
 
+// Formulir IKP Routes (Protected, Administrator and PJ Mutu)
+$routes->group('formulir-ikp', ['filter' => 'role:administrator,pj-mutu'], function($routes) {
+    $routes->get('/', 'FormulirIKP::index');
+    $routes->get('daftar', 'FormulirIKP::daftar');
+    $routes->get('create', 'FormulirIKP::create');
+    $routes->post('store', 'FormulirIKP::store');
+    $routes->get('view/(:num)', 'FormulirIKP::view/$1');
+    $routes->get('edit/(:num)', 'FormulirIKP::edit/$1');
+    $routes->post('update/(:num)', 'FormulirIKP::update/$1');
+    $routes->get('delete/(:num)', 'FormulirIKP::delete/$1');
+});
+
+// Investigasi Sederhana Routes (Protected, Administrator and PJ Mutu)
+$routes->group('investigasi-sederhana', ['filter' => 'role:administrator,pj-mutu'], function($routes) {
+    $routes->get('/', 'InvestigasiSederhana::index');
+    $routes->get('create', 'InvestigasiSederhana::create');
+    $routes->get('create/(:num)', 'InvestigasiSederhana::create/$1');
+    $routes->post('store', 'InvestigasiSederhana::store');
+    $routes->get('view/(:num)', 'InvestigasiSederhana::view/$1');
+    $routes->get('edit/(:num)', 'InvestigasiSederhana::edit/$1');
+    $routes->post('update/(:num)', 'InvestigasiSederhana::update/$1');
+    $routes->post('delete/(:num)', 'InvestigasiSederhana::delete/$1'); // delete using POST in the modal
+});
+
 // Input Indikator Mutu RS Routes (Protected, PJ Mutu and Administrator)
 $routes->group('input-indikator-mutu', ['filter' => 'role:pj-mutu'], function($routes) {
     $routes->get('/', 'InputIndikatorMutu::index');
