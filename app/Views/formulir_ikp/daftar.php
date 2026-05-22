@@ -36,14 +36,14 @@
                 <thead class="table-light">
                     <tr>
                         <th class="px-3" style="width:50px">No</th>
-                        <th>Nama Pasien</th>
-                        <th>No MR</th>
+                        <th>Nama Pasien & No MR</th>
                         <th>Ruangan Asal</th>
                         <th>Tgl Insiden</th>
                         <th>Insiden</th>
                         <th>Jenis Insiden</th>
                         <th>Grading</th>
                         <th>Status Investigasi</th>
+                        <th>Status Lapor</th>
                         <th class="text-center" style="min-width:180px">Aksi</th>
                     </tr>
                 </thead>
@@ -53,8 +53,8 @@
                         <td class="px-3"><?= $no++ ?></td>
                         <td>
                             <div class="fw-semibold"><?= esc($ikp['nama_pasien']) ?></div>
+                            <small class="text-muted"><i class="bi bi-person-badge"></i> <?= esc($ikp['no_mr'] ?? '-') ?></small>
                         </td>
-                        <td><?= esc($ikp['no_mr'] ?? '-') ?></td>
                         <td>
                             <div class="fw-semibold"><?= esc($ikp['area_pengukuran'] ?? '-') ?></div>
                             <?php if (!empty($ikp['ruangan'])): ?>
@@ -91,34 +91,74 @@
                                 'kuning' => 'warning',
                                 'merah'  => 'danger',
                             ];
-                            $gradingBadge = $gradingMap[$ikp['grading']] ?? 'secondary';
+                            $gradingAwalBadge = $gradingMap[strtolower($ikp['grading'] ?? '')] ?? 'secondary';
+                            $gradingAkhirBadge = $gradingMap[strtolower($ikp['grading_akhir'] ?? '')] ?? 'secondary';
                             ?>
-                            <?php if ($ikp['grading']): ?>
-                                <span class="badge bg-<?= $gradingBadge ?> text-uppercase"><?= esc($ikp['grading']) ?></span>
-                            <?php else: ?>
-                                <span class="text-muted">-</span>
-                            <?php endif; ?>
+                            <div class="d-flex flex-column gap-1">
+                                <div>
+                                    <small class="text-muted d-block" style="font-size:0.7rem">Awal</small>
+                                    <?php if ($ikp['grading']): ?>
+                                        <span class="badge bg-<?= $gradingAwalBadge ?> text-uppercase"><?= esc($ikp['grading']) ?></span>
+                                    <?php else: ?>
+                                        <span class="text-muted">-</span>
+                                    <?php endif; ?>
+                                </div>
+                                <?php if ($ikp['inv_id']): ?>
+                                <div>
+                                    <small class="text-muted d-block" style="font-size:0.7rem">Akhir</small>
+                                    <?php if (!empty($ikp['grading_akhir'])): ?>
+                                        <span class="badge bg-<?= $gradingAkhirBadge ?> text-uppercase"><?= esc($ikp['grading_akhir']) ?></span>
+                                    <?php else: ?>
+                                        <span class="text-muted">-</span>
+                                    <?php endif; ?>
+                                </div>
+                                <?php endif; ?>
+                            </div>
                         </td>
                         <td>
-                            <?php if ($ikp['inv_id']): ?>
-                                <span class="badge bg-success"><i class="bi bi-check-circle"></i> Selesai</span>
-                            <?php else: ?>
-                                <span class="badge bg-secondary">Belum</span>
-                            <?php endif; ?>
-                        </td>
-                        <td class="text-center">
-                            <div class="d-flex gap-1 justify-content-center">
+                            <div class="d-flex flex-column gap-1 align-items-center">
+                                <?php if ($ikp['inv_id']): ?>
+                                    <span class="badge bg-success"><i class="bi bi-check-circle"></i> Selesai</span>
+                                <?php else: ?>
+                                    <span class="badge bg-secondary">Belum</span>
+                                <?php endif; ?>
+                                
                                 <?php if ($ikp['inv_id']): ?>
                                     <a href="<?= base_url('investigasi-sederhana/view/' . $ikp['inv_id']) ?>"
-                                       class="btn btn-sm btn-outline-success" title="Lihat Investigasi Sederhana">
+                                       class="btn btn-sm btn-outline-success mt-1" style="font-size: 0.7rem;" title="Lihat Investigasi Sederhana">
                                         <i class="bi bi-search"></i> Lihat Inv.
                                     </a>
                                 <?php elseif (in_array(strtolower($ikp['grading'] ?? ''), ['hijau', 'biru'])): ?>
                                     <a href="<?= base_url('investigasi-sederhana/create/' . $ikp['id']) ?>"
-                                       class="btn btn-sm btn-outline-primary" title="Buat Investigasi Sederhana">
+                                       class="btn btn-sm btn-outline-primary mt-1" style="font-size: 0.7rem;" title="Buat Investigasi Sederhana">
                                         <i class="bi bi-search"></i> Buat Inv.
                                     </a>
                                 <?php endif; ?>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="d-flex flex-column gap-1 align-items-center">
+                                <?php if ($ikp['is_dilaporkan'] ?? 0): ?>
+                                    <span class="badge bg-success"><i class="bi bi-check-circle"></i> Sudah</span>
+                                <?php else: ?>
+                                    <span class="badge bg-warning text-dark"><i class="bi bi-clock"></i> Belum</span>
+                                <?php endif; ?>
+                                
+                                <?php if (in_groups('administrator')): ?>
+                                    <?php if (empty($ikp['is_dilaporkan'])): ?>
+                                        <button type="button" class="btn btn-sm btn-outline-success btn-tandai mt-1" style="font-size: 0.7rem;" data-id="<?= $ikp['id'] ?>" data-nama="<?= esc($ikp['nama_pasien']) ?>" title="Tandai Sudah Dilaporkan">
+                                            <i class="bi bi-check2-all"></i> Lapor
+                                        </button>
+                                    <?php else: ?>
+                                        <button type="button" class="btn btn-sm btn-outline-secondary btn-batal-tandai mt-1" style="font-size: 0.7rem;" data-id="<?= $ikp['id'] ?>" data-nama="<?= esc($ikp['nama_pasien']) ?>" title="Batal Tandai Dilaporkan">
+                                            <i class="bi bi-x-circle"></i> Batal
+                                        </button>
+                                    <?php endif; ?>
+                                <?php endif; ?>
+                            </div>
+                        </td>
+                        <td class="text-center">
+                            <div class="d-flex gap-1 justify-content-center">
                                 <a href="<?= base_url('formulir-ikp/view/' . $ikp['id']) ?>"
                                    class="btn btn-sm btn-outline-info" title="Lihat Detail">
                                     <i class="bi bi-eye"></i> View
@@ -169,6 +209,56 @@
     </div>
 </div>
 
+<?php /* ===== Modal Konfirmasi Tandai ===== */ ?>
+<div class="modal fade" id="modalTandai" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header border-0 pb-0">
+                <h5 class="modal-title text-success">
+                    <i class="bi bi-check-circle-fill me-2"></i>Konfirmasi Lapor
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <p class="mb-0">Apakah Anda yakin ingin menandai laporan IKP atas nama <strong id="nama-tandai"></strong> sudah dilaporkan?</p>
+            </div>
+            <div class="modal-footer border-0 pt-0">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                    <i class="bi bi-x-circle"></i> Batal
+                </button>
+                <a href="#" id="link-tandai" class="btn btn-success">
+                    <i class="bi bi-check"></i> Ya, Tandai
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<?php /* ===== Modal Konfirmasi Batal Tandai ===== */ ?>
+<div class="modal fade" id="modalBatalTandai" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header border-0 pb-0">
+                <h5 class="modal-title text-secondary">
+                    <i class="bi bi-arrow-counterclockwise me-2"></i>Konfirmasi Batal Lapor
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <p class="mb-0">Apakah Anda yakin ingin <strong>membatalkan</strong> status lapor untuk IKP atas nama <strong id="nama-batal-tandai"></strong>?</p>
+            </div>
+            <div class="modal-footer border-0 pt-0">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                    <i class="bi bi-x-circle"></i> Tutup
+                </button>
+                <a href="#" id="link-batal-tandai" class="btn btn-danger">
+                    <i class="bi bi-check"></i> Ya, Batalkan
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
 <?= $this->endSection(); ?>
 
 <?= $this->section('scripts'); ?>
@@ -193,7 +283,7 @@ document.addEventListener('DOMContentLoaded', function () {
         pageLength: 10,
         order: [[0, 'asc']],
         columnDefs: [
-            { orderable: false, targets: [8] }
+            { orderable: false, targets: [-1] }
         ],
     });
 
@@ -208,6 +298,36 @@ document.addEventListener('DOMContentLoaded', function () {
             modalHapus.show();
         });
     });
+
+    // Modal Tandai
+    const modalTandaiElement = document.getElementById('modalTandai');
+    if (modalTandaiElement) {
+        const modalTandai = new bootstrap.Modal(modalTandaiElement);
+        document.querySelectorAll('.btn-tandai').forEach(function (btn) {
+            btn.addEventListener('click', function () {
+                const id   = this.dataset.id;
+                const nama = this.dataset.nama;
+                document.getElementById('nama-tandai').textContent = nama;
+                document.getElementById('link-tandai').href = '<?= base_url('formulir-ikp/mark-reported/') ?>' + id;
+                modalTandai.show();
+            });
+        });
+    }
+
+    // Modal Batal Tandai
+    const modalBatalTandaiElement = document.getElementById('modalBatalTandai');
+    if (modalBatalTandaiElement) {
+        const modalBatalTandai = new bootstrap.Modal(modalBatalTandaiElement);
+        document.querySelectorAll('.btn-batal-tandai').forEach(function (btn) {
+            btn.addEventListener('click', function () {
+                const id   = this.dataset.id;
+                const nama = this.dataset.nama;
+                document.getElementById('nama-batal-tandai').textContent = nama;
+                document.getElementById('link-batal-tandai').href = '<?= base_url('formulir-ikp/unmark-reported/') ?>' + id;
+                modalBatalTandai.show();
+            });
+        });
+    }
 });
 </script>
 <?= $this->endSection(); ?>

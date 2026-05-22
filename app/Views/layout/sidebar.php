@@ -121,24 +121,17 @@
                 <?php endif; ?>
                  <?php if (in_groups('administrator') || in_groups('pj-mutu')) : ?>
                 <?php $formulirMenu = ['formulir-ikp', 'investigasi-sederhana', 'daftar-ikp']; ?>
-                <li class="nav-item <?= in_array($uri1, $formulirMenu) ? 'menu-open' : '' ?>">
-                    <a href="#" class="nav-link <?= in_array($uri1, $formulirMenu) ? 'active' : '' ?>">
+                <li class="nav-item">
+                    <a href="<?= base_url('formulir-ikp/daftar') ?>" class="nav-link <?= in_array($uri1, $formulirMenu) ? 'active' : '' ?>">
                         <i class="nav-icon bi bi-file-earmark-medical"></i>
-                        <p>
-                            Laporan Insiden (IKP)
-                            <i class="nav-arrow bi bi-chevron-right"></i>
-                        </p>
+                        <p>Laporan Insiden (IKP)</p>
                     </a>
-                    <ul class="nav nav-treeview">
-                        <li class="nav-item">
-                            <a href="<?= base_url('formulir-ikp/daftar') ?>" class="nav-link <?= ($uri1 == 'formulir-ikp' && service('uri')->getSegment(2) == 'daftar') ? 'active' : '' ?>">
-                                <i class="nav-icon bi bi-list-ul"></i>
-                                <p>Daftar Laporan IKP</p>
-                            </a>
-                        </li>
-
-
-                    </ul>
+                </li>
+                <li class="nav-item">
+                    <a href="<?= base_url('laporan-kpc/daftar') ?>" class="nav-link <?= $uri1 == 'laporan-kpc' ? 'active' : '' ?>">
+                        <i class="nav-icon bi bi-file-earmark-medical-fill"></i>
+                        <p>Laporan KPC</p>
+                    </a>
                 </li>
                 <?php endif; ?>
 
@@ -146,6 +139,12 @@
                     <a href="<?= base_url('pdsa') ?>" class="nav-link <?= $uri1 == 'pdsa' ? 'active' : '' ?>">
                         <i class="nav-icon bi bi-clipboard-check"></i>
                         <p>PDSA</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="<?= base_url('risk-register') ?>" class="nav-link <?= $uri1 == 'risk-register' ? 'active' : '' ?>">
+                        <i class="nav-icon bi bi-shield-exclamation"></i>
+                        <p>Risk Register</p>
                     </a>
                 </li>
                 <li class="nav-item">

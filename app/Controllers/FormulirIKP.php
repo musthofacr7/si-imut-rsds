@@ -28,7 +28,7 @@ class FormulirIKP extends BaseController
     public function daftar()
     {
         $builder = $this->ikpModel
-            ->select('formulir_ikp.*, investigasi_sederhana.id as inv_id, area_pengukuran.area_pengukuran')
+            ->select('formulir_ikp.*, investigasi_sederhana.id as inv_id, investigasi_sederhana.grading_ulang as grading_akhir, area_pengukuran.area_pengukuran')
             ->join('investigasi_sederhana', 'investigasi_sederhana.ikp_id = formulir_ikp.id AND investigasi_sederhana.deleted_at IS NULL', 'left')
             ->join('area_pengukuran', 'area_pengukuran.id = formulir_ikp.id_area_pengukuran', 'left');
 
@@ -297,5 +297,43 @@ class FormulirIKP extends BaseController
         }
 
         return redirect()->to('formulir-ikp/daftar')->with('message', 'Laporan IKP dan Investigasi Sederhana (jika ada) berhasil dihapus.');
+    }
+
+    /**
+     * Tandai laporan IKP sudah dilaporkan (Admin only)
+     */
+    public function markReported($id)
+    {
+        if (!in_groups('administrator')) {
+            return redirect()->to('formulir-ikp/daftar')->with('error', 'Hanya administrator yang dapat melakukan aksi ini.');
+        }
+
+        $ikp = $this->ikpModel->find($id);
+        if (!$ikp) {
+            return redirect()->to('formulir-ikp/daftar')->with('error', 'Data tidak ditemukan.');
+        }
+
+        $this->ikpModel->update($id, ['is_dilaporkan' => 1]);
+
+        return redirect()->to('formulir-ikp/daftar')->with('message', 'Laporan IKP berhasil ditandai sebagai sudah dilaporkan.');
+    }
+
+    /**
+     * Batal tandai laporan IKP sudah dilaporkan (Admin only)
+     */
+    public function unmarkReported($id)
+    {
+        if (!in_groups('administrator')) {
+            return redirect()->to('formulir-ikp/daftar')->with('error', 'Hanya administrator yang dapat melakukan aksi ini.');
+        }
+
+        $ikp = $this->ikpModel->find($id);
+        if (!$ikp) {
+            return redirect()->to('formulir-ikp/daftar')->with('error', 'Data tidak ditemukan.');
+        }
+
+        $this->ikpModel->update($id, ['is_dilaporkan' => 0]);
+
+        return redirect()->to('formulir-ikp/daftar')->with('message', 'Status laporan IKP berhasil dibatalkan menjadi belum dilaporkan.');
     }
 }

@@ -30,7 +30,7 @@
           <!-- Judul di tengah -->
           <div style="flex:1;text-align:center">
             <div style="font-weight:bold;font-size:11pt">LEMBAR KERJA INVESTIGASI SEDERHANA</div>
-            <div style="font-weight:bold;font-size:11pt">RSUD Dr. Soedirman kebumen</div>
+            <div style="font-weight:bold;font-size:11pt">RSUD Dr. Soedirman Kebumen</div>
             <div style="font-size:10pt">untuk <i>Bands</i> Risiko BIRU / HIJAU</div>
           </div>
           <!-- Spasi agar tengah pas -->
@@ -88,15 +88,15 @@
           </tr>
           <?php if(!empty($inv['rekomendasi'])): ?>
             <?php foreach($inv['rekomendasi'] as $rek): ?>
-            <tr>
+            <tr style="height: 50px;">
               <td style="border:1px solid #000;padding:4px 6px;vertical-align:top">- <?=esc($rek['rekomendasi']??'')?></td>
               <td style="border:1px solid #000;padding:4px 6px;vertical-align:top"><?=esc($rek['pj_rekomendasi']??'')?></td>
               <td style="border:1px solid #000;padding:4px 6px;vertical-align:top"><?=$rek['tgl_rekomendasi']?date('d/m/Y',strtotime($rek['tgl_rekomendasi'])):''?></td>
             </tr>
             <?php endforeach; ?>
           <?php else: ?>
-            <tr>
-              <td style="border:1px solid #000;padding:4px 6px;height:40px">- </td>
+            <tr style="height: 50px;">
+              <td style="border:1px solid #000;padding:4px 6px;">- </td>
               <td style="border:1px solid #000;padding:4px 6px"></td>
               <td style="border:1px solid #000;padding:4px 6px"></td>
             </tr>
@@ -112,15 +112,15 @@
           </tr>
           <?php if(!empty($inv['tindakan'])): ?>
             <?php foreach($inv['tindakan'] as $tind): ?>
-            <tr>
+            <tr style="height: 50px;">
               <td style="border:1px solid #000;padding:4px 6px;vertical-align:top">- <?=esc($tind['tindakan']??'')?></td>
               <td style="border:1px solid #000;padding:4px 6px;vertical-align:top"><?=esc($tind['pj_tindakan']??'')?></td>
               <td style="border:1px solid #000;padding:4px 6px;vertical-align:top"><?=$tind['tgl_tindakan']?date('d/m/Y',strtotime($tind['tgl_tindakan'])):''?></td>
             </tr>
             <?php endforeach; ?>
           <?php else: ?>
-            <tr>
-              <td style="border:1px solid #000;padding:4px 6px;height:40px">- </td>
+            <tr style="height: 50px;">
+              <td style="border:1px solid #000;padding:4px 6px;">- </td>
               <td style="border:1px solid #000;padding:4px 6px"></td>
               <td style="border:1px solid #000;padding:4px 6px"></td>
             </tr>
@@ -150,20 +150,25 @@
             <td style="border:1px solid #000;padding:4px 6px;width:20%;font-weight:bold;vertical-align:top" rowspan="2">Manajemen<br>Risiko :</td>
             <td style="border:1px solid #000;padding:4px 6px">
               Investigasi Lengkap : 
-              <span style="text-decoration: <?= ($inv['investigasi_lengkap']??'')=='ya' ? 'underline' : 'none' ?>">YA</span>/<!--
-              --><span style="text-decoration: <?= ($inv['investigasi_lengkap']??'')=='tidak' ? 'underline' : 'none' ?>">TIDAK</span>
+              <span style="<?= ($inv['investigasi_lengkap']??'')=='ya' ? 'font-weight:bold;' : 'text-decoration:line-through;' ?>">YA</span> / 
+              <span style="<?= ($inv['investigasi_lengkap']??'')=='tidak' ? 'font-weight:bold;' : 'text-decoration:line-through;' ?>">TIDAK</span>
               &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Tanggal : <span style="border-bottom:1px solid #000;display:inline-block;width:150px"><?=$inv['tgl_investigasi_lengkap']?date('d/m/Y',strtotime($inv['tgl_investigasi_lengkap'])):''?></span>
             </td>
           </tr>
           <tr>
             <td style="border:1px solid #000;padding:4px 6px">
-              Diperlukan Investigasi lebih lanjut : 
-              <span style="text-decoration: <?= ($inv['investigasi_lanjut']??'')=='ya' ? 'underline' : 'none' ?>">YA</span>/<!--
-              --><span style="text-decoration: <?= ($inv['investigasi_lanjut']??'')=='tidak' ? 'underline' : 'none' ?>">TIDAK</span><br>
-              Investigasi setelah <i>Grading</i> ulang : 
-              <span style="text-decoration: <?= ($inv['grading_ulang']??'')=='hijau' ? 'underline' : 'none' ?>">Hijau</span>/<!--
-              --><span style="text-decoration: <?= ($inv['grading_ulang']??'')=='kuning' ? 'underline' : 'none' ?>">Kuning</span>/<!--
-              --><span style="text-decoration: <?= ($inv['grading_ulang']??'')=='merah' ? 'underline' : 'none' ?>">Merah</span>
+              <div style="margin-bottom:8px">
+                Diperlukan Investigasi lebih lanjut : 
+                <span style="<?= ($inv['investigasi_lanjut']??'')=='ya' ? 'font-weight:bold;' : 'text-decoration:line-through;' ?>">YA</span> / 
+                <span style="<?= ($inv['investigasi_lanjut']??'')=='tidak' ? 'font-weight:bold;' : 'text-decoration:line-through;' ?>">TIDAK</span>
+              </div>
+              <div>
+                Investigasi setelah <i>Grading</i> ulang : 
+                <span style="<?= ($inv['grading_ulang']??'')=='biru' ? 'background-color:#0d6efd;color:#fff;padding:2px 6px;border-radius:4px;font-weight:bold;-webkit-print-color-adjust:exact;print-color-adjust:exact;' : 'text-decoration:line-through;' ?>">Biru</span> / 
+                <span style="<?= ($inv['grading_ulang']??'')=='hijau' ? 'background-color:#198754;color:#fff;padding:2px 6px;border-radius:4px;font-weight:bold;-webkit-print-color-adjust:exact;print-color-adjust:exact;' : 'text-decoration:line-through;' ?>">Hijau</span> / 
+                <span style="<?= ($inv['grading_ulang']??'')=='kuning' ? 'background-color:#ffc107;color:#000;padding:2px 6px;border-radius:4px;font-weight:bold;-webkit-print-color-adjust:exact;print-color-adjust:exact;' : 'text-decoration:line-through;' ?>">Kuning</span> / 
+                <span style="<?= ($inv['grading_ulang']??'')=='merah' ? 'background-color:#dc3545;color:#fff;padding:2px 6px;border-radius:4px;font-weight:bold;-webkit-print-color-adjust:exact;print-color-adjust:exact;' : 'text-decoration:line-through;' ?>">Merah</span>
+              </div>
             </td>
           </tr>
         </table>

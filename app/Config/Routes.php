@@ -105,6 +105,20 @@ $routes->group('formulir-ikp', ['filter' => 'role:administrator,pj-mutu'], funct
     $routes->get('edit/(:num)', 'FormulirIKP::edit/$1');
     $routes->post('update/(:num)', 'FormulirIKP::update/$1');
     $routes->get('delete/(:num)', 'FormulirIKP::delete/$1');
+    $routes->get('mark-reported/(:num)', 'FormulirIKP::markReported/$1');
+    $routes->get('unmark-reported/(:num)', 'FormulirIKP::unmarkReported/$1');
+});
+
+// Laporan KPC Routes (Protected, Administrator and PJ Mutu)
+$routes->group('laporan-kpc', ['filter' => 'role:administrator,pj-mutu'], function($routes) {
+    $routes->get('/', 'LaporanKPC::index');
+    $routes->get('daftar', 'LaporanKPC::daftar');
+    $routes->get('create', 'LaporanKPC::create');
+    $routes->post('store', 'LaporanKPC::store');
+    $routes->get('view/(:num)', 'LaporanKPC::view/$1');
+    $routes->get('edit/(:num)', 'LaporanKPC::edit/$1');
+    $routes->post('update/(:num)', 'LaporanKPC::update/$1');
+    $routes->get('delete/(:num)', 'LaporanKPC::delete/$1');
 });
 
 // Investigasi Sederhana Routes (Protected, Administrator and PJ Mutu)
@@ -190,4 +204,14 @@ $routes->group('pdsa', ['filter' => 'login'], function($routes) {
     $routes->get('delete/(:num)', 'PDSA::delete/$1');
 });
 
+// Risk Register Routes (Protected, Administrator & PJ Mutu)
+$routes->group('risk-register', ['filter' => 'login'], function($routes) {
+    $routes->get('/', 'RiskRegister::index');
+    $routes->get('create', 'RiskRegister::create');
+    $routes->post('store', 'RiskRegister::store');
+    $routes->get('view/(:num)', 'RiskRegister::view/$1');
+    $routes->get('edit/(:num)', 'RiskRegister::edit/$1');
+    $routes->post('update/(:num)', 'RiskRegister::update/$1');
+    $routes->get('delete/(:num)', 'RiskRegister::delete/$1');
+});
 

@@ -69,8 +69,9 @@
         <?php /* ===== I. DATA PASIEN ===== */ ?>
         <div class="section-badge">I. DATA PASIEN</div>
 
+        <?php $isPjMutu = in_groups('pj-mutu') && !in_groups('administrator'); ?>
         <div class="row g-3 mb-3">
-            <div class="col-md-3">
+            <div class="<?= $isPjMutu ? 'col-md-6' : 'col-md-3' ?>">
                 <label class="form-label fw-semibold">Nama Pasien</label>
                 <input type="text" class="form-control" name="nama_pasien" placeholder="Nama lengkap pasien">
             </div>
@@ -78,6 +79,9 @@
                 <label class="form-label fw-semibold">No MR</label>
                 <input type="text" class="form-control" name="no_mr" placeholder="No. Rekam Medis">
             </div>
+            <?php if ($isPjMutu): ?>
+                <input type="hidden" name="id_area_pengukuran" value="<?= !empty($area_pengukuran) ? $area_pengukuran[0]['id'] : '' ?>">
+            <?php else: ?>
             <div class="col-md-3">
                 <label class="form-label fw-semibold">Ruangan Asal *</label>
                 <select class="form-select" name="id_area_pengukuran" required>
@@ -87,6 +91,7 @@
                     <?php endforeach; ?>
                 </select>
             </div>
+            <?php endif; ?>
             <div class="col-md-3">
                 <label class="form-label fw-semibold">Detail Ruangan</label>
                 <input type="text" class="form-control" name="ruangan" placeholder="Nama ruangan">

@@ -7,8 +7,8 @@
             <div class="card-header d-flex justify-content-between align-items-center">
                 <h3 class="card-title"><?= $title ?></h3>
                 <?php if (in_groups('pj-mutu')) : ?>
-                <a href="<?= base_url('pdsa/create') ?>" class="btn btn-primary btn-sm ml-auto">
-                    <i class="bi bi-plus-lg"></i> Tambah PDSA
+                <a href="<?= base_url('risk-register/create') ?>" class="btn btn-primary btn-sm ml-auto">
+                    <i class="bi bi-plus-lg"></i> Tambah Risk Register
                 </a>
                 <?php endif; ?>
             </div>
@@ -25,12 +25,12 @@
                 <?php endif; ?>
 
                 <div class="table-responsive">
-                    <table id="pdsaTable" class="table table-bordered table-striped">
+                    <table id="riskRegisterTable" class="table table-bordered table-striped">
                         <thead>
                             <tr>
                                 <th>No</th>
                                 <th>User</th>
-                                <th>File PDSA</th>
+                                <th>File Risk Register</th>
                                 <th>Deskripsi</th>
                                 <th>Keterangan Revisi</th>
                                 <th>Status Validasi</th>
@@ -40,12 +40,12 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <?php foreach ($pdsa as $key => $item) : ?>
+                            <?php foreach ($risk_register as $key => $item) : ?>
                                 <tr>
                                     <td><?= $key + 1 ?></td>
                                     <td><?= esc($item['username']) ?></td>
                                     <td>
-                                        <a href="<?= base_url('uploads/pdsa/' . $item['file_pdsa']) ?>" target="_blank" class="btn btn-sm btn-info">
+                                        <a href="<?= base_url('uploads/risk_register/' . $item['file_risk_register']) ?>" target="_blank" class="btn btn-sm btn-info">
                                             <i class="bi bi-download"></i> Download
                                         </a>
                                     </td>
@@ -64,20 +64,20 @@
                                     <td><?= esc($item['komentar_admin']) ?></td>
                                     <td>
                                         <div class="btn-group">
-                                            <a href="<?= base_url('pdsa/view/' . $item['id']) ?>" class="btn btn-info btn-sm" title="Lihat Detail">
+                                            <a href="<?= base_url('risk-register/view/' . $item['id']) ?>" class="btn btn-info btn-sm" title="Lihat Detail">
                                                 <i class="bi bi-eye"></i>
                                             </a>
                                             <?php if (in_groups('administrator')) : ?>
-                                                <a href="<?= base_url('pdsa/edit/' . $item['id']) ?>" class="btn btn-warning btn-sm" title="Validasi">
+                                                <a href="<?= base_url('risk-register/edit/' . $item['id']) ?>" class="btn btn-warning btn-sm" title="Validasi">
                                                     <i class="bi bi-check-circle"></i> Validasi
                                                 </a>
-                                                <a href="<?= base_url('pdsa/delete/' . $item['id']) ?>" class="btn btn-danger btn-sm" onclick="return confirm('Yakin ingin menghapus data ini?')" title="Hapus">
+                                                <a href="<?= base_url('risk-register/delete/' . $item['id']) ?>" class="btn btn-danger btn-sm" onclick="return confirm('Yakin ingin menghapus data ini?')" title="Hapus">
                                                     <i class="bi bi-trash"></i>
                                                 </a>
                                             <?php endif; ?>
                                             
                                             <?php if (in_groups('pj-mutu') && user_id() == $item['user_id'] && $item['validasi'] != 1) : ?>
-                                                <a href="<?= base_url('pdsa/edit/' . $item['id']) ?>" class="btn btn-primary btn-sm" title="Edit / Re-upload">
+                                                <a href="<?= base_url('risk-register/edit/' . $item['id']) ?>" class="btn btn-primary btn-sm" title="Edit / Re-upload">
                                                     <i class="bi bi-pencil"></i> Edit
                                                 </a>
                                             <?php endif; ?>
@@ -97,7 +97,7 @@
 <?= $this->section('scripts') ?>
 <script>
 document.addEventListener('DOMContentLoaded', function () {
-    $('#pdsaTable').DataTable({
+    $('#riskRegisterTable').DataTable({
         responsive: true,
         language: {
             search: 'Cari:',
@@ -109,7 +109,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 next: '›',
                 previous: '‹',
             },
-            emptyTable: 'Belum ada data PDSA',
+            emptyTable: 'Belum ada data Risk Register',
             zeroRecords: 'Data tidak ditemukan',
         },
         pageLength: 10,
